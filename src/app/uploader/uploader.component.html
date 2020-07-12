@@ -1,0 +1,20 @@
+
+  <mat-toolbar>
+    <span>迷宮チェッカー</span>
+  </mat-toolbar>
+<mat-card class="example-card">
+
+<input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
+<button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
+  <mat-icon>attach_file</mat-icon>
+   TWログファイルを選択
+</button>
+<p class="file-name" *ngIf="!file; else fileName">ファイルが選択されていません</p>
+<ng-template #fileName>
+  <p class="file-name">{{ file?.name }}</p>
+</ng-template>
+<div *ngIf="file">
+<app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
+
+</div>
+</mat-card>
