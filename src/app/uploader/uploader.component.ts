@@ -13,7 +13,7 @@ export class UploaderComponent {
   file: File | null = null;
   lines: string[];
   meiqRelatedLineInfos: LineInfo[];
-  displayedColumns = ['title', 'duration'];
+
 
   onClickFileInputButton(): void {
     this.fileInput.nativeElement.click();
@@ -32,14 +32,7 @@ export class UploaderComponent {
     reader.readAsText(this.file, 'shift-jis');
   }
 
-  getTotal(): number {
-    if(this.meiqRelatedLineInfos) {
-      return this.meiqRelatedLineInfos.reduce((p, c) => {
-        return p + c.duration;
-      }, 0);
-    }
-    return 0;
-  }
+
 
   private readLine(str: string): void {
     const lines = this.splitLines(str);
