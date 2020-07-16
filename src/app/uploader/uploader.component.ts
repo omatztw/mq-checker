@@ -54,13 +54,13 @@ export class UploaderComponent {
       this.meiqRelatedLineInfos.forEach(
         info => {
           const duration = toMinutes(info.duration);
-          const tabs = info.title.length < 3 ? '%09%09' : '%09';
-          text += `${info.title}${tabs}: ${duration}%0A`;
+          text += `${duration}  ${info.title}%0A`;
         }
       );
-      text += `合計%09%09: ${toMinutes(totalTime(this.meiqRelatedLineInfos))}%0A%0A`;
+      text += `-------------%0A`;
+      text += `${toMinutes(totalTime(this.meiqRelatedLineInfos))}%0A%0A`;
     }
-    text += `迷宮チェッカー ${window.location.href}`;
+    text += `%23迷宮チェッカー ${window.location.href}`;
     return text;
   }
 
