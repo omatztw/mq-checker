@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { totalTime } from '../util';
 
 @Component({
   selector: 'app-table',
@@ -16,12 +17,7 @@ export class TableComponent implements OnInit {
   }
 
   getTotal(): number {
-    if(this.meiqRelatedLineInfos) {
-      return this.meiqRelatedLineInfos.reduce((p, c) => {
-        return p + c.duration;
-      }, 0);
-    }
-    return 0;
+    return totalTime(this.meiqRelatedLineInfos);
   }
 
 }

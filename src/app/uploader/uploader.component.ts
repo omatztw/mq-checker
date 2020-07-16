@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import {LineType, LineInfo, MAP_INFO} from '../models/models'
+import {LineType, LineInfo, MAP_INFO} from '../models/models';
+import { toMinutes, totalTime } from '../util';
 
 @Component({
   selector: 'app-uploader',
@@ -13,7 +14,6 @@ export class UploaderComponent {
   file: File | null = null;
   lines: string[];
   meiqRelatedLineInfos: LineInfo[];
-
 
   onClickFileInputButton(): void {
     this.fileInput.nativeElement.click();
@@ -31,6 +31,40 @@ export class UploaderComponent {
     };
     reader.readAsText(this.file, 'shift-jis');
   }
+
+  get date(): Date {
+    if (this.file) {
+      const dateRe = this.file.name.match(/TWChatLog_(\d\d\d\d)_(\d\d)_(\d\d).html/);
+      if (dateRe) {
+        const year = parseInt(dateRe[1], 10);
+        const month = parseInt(dateRe[2], 10);
+        const day = parseInt(dateRe[3], 10);
+        return new Date(year, month - 1, day);
+      }
+    }
+    return undefined;
+  }
+
+  get tweetText(): string {
+    let text = '';
+    if (this.date) {
+      text += `${this.date.toLocaleDateString()}%0A`;
+    }
+    if (this.meiqRelatedLineInfos) {
+      this.meiqRelatedLineInfos.forEach(
+        info => {
+          const duration = toMinutes(info.duration);
+          const tabs = info.title.length < 3 ? '%09%09' : '%09';
+          text += `${info.title}${tabs}: ${duration}%0A`;
+        }
+      );
+      text += `合計%09%09: ${toMinutes(totalTime(this.meiqRelatedLineInfos))}%0A%0A`;
+    }
+    text += `迷宮チェッカー ${window.location.href}`;
+    return text;
+  }
+
+
 
 
 
@@ -62,6 +96,13 @@ export class UploaderComponent {
       const hour = parseInt(result[1], 10);
       const minutes = parseInt(result[2], 10);
       const seconds = parseInt(result[3], 10);
+      if (this.date) {
+        const date = new Date(this.date.getTime());
+        date.setHours(hour);
+        date.setMinutes(minutes);
+        date.setSeconds(seconds);
+        return date;
+      }
       return new Date(2020, 5, 9, hour, minutes, seconds);
     }
     return null;

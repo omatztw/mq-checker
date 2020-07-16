@@ -15,6 +15,10 @@
 </ng-template>
 <div *ngIf="file">
 <app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
-
 </div>
+<a *ngIf="meiqRelatedLineInfos" href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
+  <span class="twitter_btn">
+    <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
+  </span>
+</a>
 </mat-card>
