@@ -27,7 +27,7 @@ export class UploaderComponent {
       this.readLine(e.target.result.toString());
       this.fetchData();
       this.completeLineInfo();
-      this.meiqRelatedLineInfos = this.meiqRelatedLineInfos.filter(i => !!i.endTime);
+      this.removeDuplicate();
     };
     reader.readAsText(this.file, 'shift-jis');
   }
@@ -118,6 +118,15 @@ export class UploaderComponent {
     this.meiqRelatedLineInfos = this.meiqRelatedLineInfos
                                 .filter(i => !!i.endTime)
                                 .filter(i => i.type !== LineType.offline);
+  }
+
+  private removeDuplicate(): void {
+    this.meiqRelatedLineInfos.reduce((p, c, i, arr) => {
+      if (p && p.title === c.title) {
+        this.meiqRelatedLineInfos.splice(i - 1, 1);
+      }
+      return c;
+    }, undefined);
   }
 
 }
