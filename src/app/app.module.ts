@@ -41,13 +41,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UploaderComponent } from './uploader/uploader.component';
 import { TimePipe } from './time.pipe';
 import { TableComponent } from './table/table.component';
+import { SdtComponent } from './sdt/sdt.component';
+import { SdtTableComponent } from './sdt-table/sdt-table.component';
+import { StdSummaryTableComponent } from './std-summary-table/std-summary-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UploaderComponent,
     TimePipe,
-    TableComponent
+    TableComponent,
+    SdtComponent,
+    SdtTableComponent,
+    StdSummaryTableComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {LineType, LineInfo, MAP_INFO} from '../models/models';
-import { toMinutes, totalTime } from '../util';
+import { toMinutes, totalTime, getLogDate, fetchDateFromLine } from '../util';
 
 @Component({
   selector: 'app-uploader',
@@ -33,16 +33,7 @@ export class UploaderComponent {
   }
 
   get date(): Date {
-    if (this.file) {
-      const dateRe = this.file.name.match(/TWChatLog_(\d\d\d\d)_(\d\d)_(\d\d).html/);
-      if (dateRe) {
-        const year = parseInt(dateRe[1], 10);
-        const month = parseInt(dateRe[2], 10);
-        const day = parseInt(dateRe[3], 10);
-        return new Date(year, month - 1, day);
-      }
-    }
-    return undefined;
+    return getLogDate(this.file);
   }
 
   get tweetText(): string {
@@ -64,10 +55,6 @@ export class UploaderComponent {
     return text;
   }
 
-
-
-
-
   private readLine(str: string): void {
     const lines = this.splitLines(str);
     this.lines = lines;
@@ -85,27 +72,9 @@ export class UploaderComponent {
         const lineInfo = new LineInfo();
         lineInfo.title = match.value;
         lineInfo.type = match.type;
-        lineInfo.startTime = this.fetchDate(line);
+        lineInfo.startTime = fetchDateFromLine(line, this.date);
         return lineInfo;
       });
-  }
-
-  private fetchDate(line: string): Date {
-    const result = line.match(/\[ *(\d+)時 *(\d+)分 *(\d+)秒 *\]/);
-    if (result) {
-      const hour = parseInt(result[1], 10);
-      const minutes = parseInt(result[2], 10);
-      const seconds = parseInt(result[3], 10);
-      if (this.date) {
-        const date = new Date(this.date.getTime());
-        date.setHours(hour);
-        date.setMinutes(minutes);
-        date.setSeconds(seconds);
-        return date;
-      }
-      return new Date(2020, 5, 9, hour, minutes, seconds);
-    }
-    return null;
   }
 
   private completeLineInfo(): void {

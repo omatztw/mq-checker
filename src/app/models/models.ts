@@ -5,8 +5,23 @@ export class LineInfo {
   endTime: Date;
 
   get duration(): number {
-    return (this.endTime.getTime() - this.startTime.getTime())/1000;
+    return (this.endTime.getTime() - this.startTime.getTime()) / 1000;
   }
+}
+
+export class SdtSummary {
+  title: string;
+  count: number;
+  min: number;
+  max: number;
+  ave: number;
+}
+
+export class SdtScore {
+  clubName: string;
+  score: number;
+  region: string;
+  rank: number;
 }
 
 export enum LineType {
@@ -28,5 +43,23 @@ export const MAP_INFO = [
   {key: 'セリオンを退治してください。', value: 'セリオン', type: LineType.line },
   {key: 'ルミナスを退治してください。', value: 'ルミナス', type: LineType.line },
   {key: 'プシーキーの迷宮を全て通過しました！', value: 'クリア', type: LineType.line },
+  {key: '全スキルの中ディレイが', value: 'オフライン', type: LineType.offline }
+];
+
+export const SDT_MAP_INFO = [
+  {key: 'マップの奥にいるボスモンスターを退治してください。', value: 'ボス', type: LineType.line },
+  {key: 'になるように数字カードを見つけて中央の装置に投入して下さい。', value: 'スロット', type: LineType.line },
+  {key: '一人が複数のレバーを引いてもカウントされます', value: 'レバー', type: LineType.line },
+  {key: 'マップ中央のボタンの上に乗せてください。', value: '謎の破片', type: LineType.line },
+  {key: '無造作に爆発する地点を避けて中央部にある目的地に到達してください', value: '迷路', type: LineType.line },
+  {key: 'マップ中央の碑石の上に乗ってください。', value: '碑石', type: LineType.line },
+  {key: '自分に付与された数字と一致する出口を見つけてください。', value: '4ヶ所出口', type: LineType.line },
+  {key: '新しい脱出装置が生成されました。脱出装置は一定時間が経つと消えます。', value: '脱出装置', type: LineType.line },
+  {key: '変異したトゲリーナ探し', value: 'トゲリーナ', type: LineType.line },
+  {key: 'メンバー全員が各部屋の中央に乗ってください。', value: '3方向', type: LineType.line },
+  {key: '散らばっている3匹のボスを見つけて全て退治してください。', value: '3ボス', type: LineType.line },
+  {key: '見えない幽霊を避けて左下にある目的地に到達してください。', value: '幽霊', type: LineType.line },
+  {key: '[古代ベレシス]の攻撃から', value: 'ベレシス', type: LineType.line },
+  {key: 'クラブの記録は', value: 'クリア', type: LineType.clear},
   {key: '全スキルの中ディレイが', value: 'オフライン', type: LineType.offline }
 ];

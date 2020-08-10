@@ -1,0 +1,23 @@
+<mat-table [dataSource]="sdtRelatedLineInfos" class="mat-elevation-z2" color="primary">
+  <ng-container matColumnDef="startTime">
+    <mat-header-cell *matHeaderCellDef> 開始時刻 </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.startTime.toLocaleTimeString()}} </mat-cell>
+    <mat-footer-cell mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> MAP </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+    <mat-footer-cell mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="duration">
+    <mat-header-cell *matHeaderCellDef> 時間 </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.duration | time}} </mat-cell>
+    <mat-footer-cell mat-footer-cell *matFooterCellDef> {{getTotal() | time}} </mat-footer-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-footer-row *matFooterRowDef="displayedColumns;"></mat-footer-row>
+</mat-table>

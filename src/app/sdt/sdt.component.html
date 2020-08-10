@@ -1,0 +1,36 @@
+
+<mat-card class="example-card">
+
+<input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
+<button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
+  <mat-icon>attach_file</mat-icon>
+   TWログファイルを選択
+</button>
+<p class="file-name" *ngIf="!file; else fileName">ファイルが選択されていません</p>
+<ng-template #fileName>
+  <p class="file-name">{{ file?.name }}</p>
+</ng-template>
+<div *ngIf="file">
+  <div *ngIf="summary; else noContent">
+    <p *ngIf="sdtScore" class="sdt-label">{{date.toLocaleDateString()}}  {{sdtScore.clubName}}クラブ記録<br>
+      {{sdtScore.region}}地域   {{sdtScore.score}}M  {{sdtScore.rank}}位</p>
+      <app-std-summary-table [sdtSummary]="summary"></app-std-summary-table>
+      <a href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
+        <span class="twitter_btn">
+          <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
+        </span>
+      </a>
+      <div>
+        <button mat-button  color="basic" aria-label="Example icon button with a menu icon" (click)="toggleShowDetail()">
+          <mat-icon>menu</mat-icon>詳細を表示
+        </button>
+      </div>
+      <div *ngIf="detailEnabled">
+        <app-sdt-table [sdtRelatedLineInfos]="sdtRelatedLineInfos"></app-sdt-table>
+      </div>
+  </div>
+  <ng-template #noContent>
+    <p>争奪戦のデータがありませんでした。</p>
+  </ng-template>
+</div>
+</mat-card>
