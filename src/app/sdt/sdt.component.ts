@@ -52,9 +52,11 @@ export class SdtComponent {
       const summary = new SdtSummary();
       summary.title = m;
       summary.count = currentMapInfo.length;
-      summary.min = Math.min(...currentMapInfo.map(cinfo => cinfo.duration));
-      summary.max = Math.max(...currentMapInfo.map(cinfo => cinfo.duration));
-      summary.ave = parseFloat((totalTime(currentMapInfo) / currentMapInfo.length).toFixed(2));
+      if (summary.count) {
+        summary.min = Math.min(...currentMapInfo.map(cinfo => cinfo.duration));
+        summary.max = Math.max(...currentMapInfo.map(cinfo => cinfo.duration));
+        summary.ave = parseFloat((totalTime(currentMapInfo) / currentMapInfo.length).toFixed(2));
+      }
       return summary;
     });
   }
