@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {LineType, LineInfo, SDT_MAP_INFO, SdtSummary, SdtScore} from '../models/models';
-import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal } from '../util';
+import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal, formatDate } from '../util';
 
 @Component({
   selector: 'app-sdt',
@@ -36,6 +36,33 @@ export class SdtComponent {
 
   toggleShowDetail(): void {
     this.detailEnabled = !this.detailEnabled;
+  }
+
+  downloadCsv(): void {
+    const filename = `sdt_${formatDate(this.date, 'YYYYMMDD')}.csv`;
+    let data = '';
+    this.sdtRelatedLineInfos.map(
+      info => data += `${info.startTime.toLocaleTimeString()},${info.title},${info.duration}\n`
+    );
+    const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+    const blob = new Blob([bom, data], { type: 'text/csv' });
+    if (window.navigator.msSaveBlob) { // IE
+      window.navigator.msSaveBlob(blob, filename);
+    } else { // その他ブラウザ
+        // BlobからオブジェクトURLを作成する
+        const url = (window.URL || window.webkitURL).createObjectURL(blob);
+        // ダウンロード用にリンクを作成する
+        const download = document.createElement('a');
+        // リンク先に上記で生成したURLを指定する
+        download.href = url;
+        // download属性にファイル名を指定する
+        download.download = filename;
+        // 作成したリンクをクリックしてダウンロードを実行する
+        download.click();
+        // createObjectURLで作成したオブジェクトURLを開放する
+        (window.URL || window.webkitURL).revokeObjectURL(url);
+    }
+
   }
 
   get date(): Date {

@@ -26,6 +26,7 @@
         </button>
       </div>
       <div *ngIf="detailEnabled">
+        <button mat-button color="primary" (click)="downloadCsv()"><i class="fa fa-download"></i> CSVダウンロード</button>
         <app-sdt-table [sdtRelatedLineInfos]="sdtRelatedLineInfos"></app-sdt-table>
       </div>
   </div>
