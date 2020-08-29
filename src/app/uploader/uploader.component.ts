@@ -11,6 +11,7 @@ import { CalendarData } from 'ng-calendar-heatmap';
 export class UploaderComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: { nativeElement: { click: () => void; files: { [key: string]: File; }; }; };
+  @ViewChild('fileImport') fileImport: { nativeElement: { click: () => void; files: { [key: string]: File; }; }; };
 
   file: File | null = null;
   lines: string[];
@@ -18,6 +19,8 @@ export class UploaderComponent implements OnInit {
   calendarData: CalendarData[] = [];
 
   private _date: Date;
+  private importCount = 0;
+  importing = false;
 
   ngOnInit(): void {
     this.reloadCalendarData();
@@ -39,6 +42,32 @@ export class UploaderComponent implements OnInit {
       this.mergeData();
     };
     reader.readAsText(this.file, 'shift-jis');
+  }
+
+  onClickFileImportButton(): void {
+    this.fileImport.nativeElement.click();
+  }
+
+  onChangeFileImport(): void {
+    const files: { [key: string]: File } = this.fileImport.nativeElement.files;
+    this.importCount = 0;
+    this.importing = true;
+    Object.keys(files).forEach(k => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.importCount++;
+        if (this.importCount === Object.keys(files).length) {
+          this.importing = false;
+        }
+        const lines = this.splitLines(e.target.result.toString());
+        const date = getLogDate(files[k]);
+        const lineInfos = this.objectLines(lines, date);
+        const completeLineInfos = this.filterLineInfo(lineInfos);
+        this.removeDuplicateLines(completeLineInfos);
+        this.saveLineData(completeLineInfos, date);
+      };
+      reader.readAsText(files[k], 'shift-jis');
+    });
   }
 
   get date(): Date {
@@ -94,52 +123,72 @@ export class UploaderComponent implements OnInit {
   }
 
   private fetchData(): void {
-     this.meiqRelatedLineInfos = this.lines
+     this.meiqRelatedLineInfos = this.objectLines(this.lines, this.date);
+  }
+
+  private objectLines(lines: string[], date: Date): LineInfo[] {
+    return lines
      .filter(line => MAP_INFO.some(m => line.includes(m.key)))
     .map(line => {
         const match = MAP_INFO.find(m => line.includes(m.key));
         const lineInfo = new LineInfo();
         lineInfo.title = match.value;
         lineInfo.type = match.type;
-        lineInfo.startTime = fetchDateFromLine(line, this.date);
+        lineInfo.startTime = fetchDateFromLine(line, date);
         return lineInfo;
       });
   }
 
   private completeLineInfo(): void {
-    this.meiqRelatedLineInfos.reduce((p, c) => {
+    this.meiqRelatedLineInfos = this.filterLineInfo(this.meiqRelatedLineInfos);
+  }
+
+  private filterLineInfo(infos: LineInfo[]): LineInfo[] {
+    if (!infos.length) {
+      return infos;
+    }
+    infos.reduce((p, c) => {
       if (c.type === LineType.line) {
         p.endTime = c.startTime;
       }
       return c;
     });
-    this.meiqRelatedLineInfos = this.meiqRelatedLineInfos
-                                .filter(i => !!i.endTime)
-                                .filter(i => i.type !== LineType.offline);
+    return infos
+    .filter(i => !!i.endTime)
+    .filter(i => i.type !== LineType.offline);
   }
 
   private removeDuplicate(): void {
-    this.meiqRelatedLineInfos.reduce((p, c, i, arr) => {
+    this.removeDuplicateLines(this.meiqRelatedLineInfos);
+  }
+
+  private removeDuplicateLines(infos: LineInfo[]): LineInfo[] {
+    infos.reduce((p, c, i, arr) => {
       if (p && p.title === c.title) {
-        this.meiqRelatedLineInfos.splice(i - 1, 1);
+        infos.splice(i - 1, 1);
       }
       return c;
     }, undefined);
+    return infos;
   }
 
   private mergeData(): void {
-    if (!this.meiqRelatedLineInfos.length) {
+    this.saveLineData(this.meiqRelatedLineInfos, this.date);
+    this.reloadCalendarData();
+  }
+
+  private saveLineData(infos: LineInfo[], date: Date): void {
+    if (!infos.length) {
       return;
     }
     const mqData = {
-      [this.date.toLocaleDateString()]: {
-        total: totalTime(this.meiqRelatedLineInfos),
-        details: this.meiqRelatedLineInfos
+      [date.toLocaleDateString()]: {
+        total: totalTime(infos),
+        details: infos
       }
     };
     const currentData = Object.assign({}, JSON.parse(localStorage.getItem('mqData')));
     localStorage.setItem('mqData', JSON.stringify(Object.assign(currentData, mqData)));
-    this.reloadCalendarData();
   }
 
   private loadData(date: Date): void {

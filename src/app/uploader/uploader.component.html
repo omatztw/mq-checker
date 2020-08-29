@@ -2,12 +2,18 @@
   <div class="calender-area">
     <app-calendar (dateSelected)="dateSelected($event)" [calendarData]="calendarData"></app-calendar>
   </div>
-        <div class="to-right">
-          <button mat-raised-button class="btn-small" color="warn" (click)="clearHistory()">
-            <i class="fa fa-trash" aria-hidden="true"></i>
-             履歴を削除
-          </button>
-        </div>
+  <div class="to-right">
+    <input type="file" style="display: none" accept="text/html" #fileImport multiple (change)="onChangeFileImport()"/>
+    <button mat-raised-button class="btn-small" color="primary" (click)="onClickFileImportButton()" [disabled]="importing">
+      <i class="fa fa-spinner" *ngIf="importing" aria-hidden="true"></i>
+      <i class="fa fa-file-text" *ngIf="!importing" aria-hidden="true"></i>
+        ログの一括インポート<span *ngIf="importing">中...</span>
+    </button>
+    <button mat-raised-button class="btn-small" color="warn" (click)="clearHistory()">
+      <i class="fa fa-trash" aria-hidden="true"></i>
+        履歴を削除
+    </button>
+  </div>
 <input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
 <button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
   <mat-icon>attach_file</mat-icon>
@@ -30,3 +36,4 @@
 </a>
 </div>
 </mat-card>
+
