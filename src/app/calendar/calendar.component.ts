@@ -21,7 +21,7 @@ export class CalendarComponent implements OnInit {
       colorRange: ['#D8E6E7', '#218380'],
       tooltipEnabled: false,
       legendEnabled: true,
-      max: 260,
+      max: 360,
       locale: {
         months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
         days: ['日', '月', '火', '水', '木', '金', '土'],
