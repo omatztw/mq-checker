@@ -18,7 +18,7 @@ export class CalendarComponent implements OnInit {
     this.calendarOptions = {
       responsive: false,
       onClick: this.selected.bind(this),
-      colorRange: ['#D8E6E7', '#218380'],
+      colorRange: ['#D8E6E7', '#008000'],
       tooltipEnabled: false,
       legendEnabled: true,
       max: 360,
