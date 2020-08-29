@@ -65,6 +65,9 @@ export class UploaderComponent implements OnInit {
         const completeLineInfos = this.filterLineInfo(lineInfos);
         this.removeDuplicateLines(completeLineInfos);
         this.saveLineData(completeLineInfos, date);
+        if (!this.importing) {
+          this.reloadCalendarData();
+        }
       };
       reader.readAsText(files[k], 'shift-jis');
     });
