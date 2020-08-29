@@ -217,6 +217,13 @@ export class UploaderComponent implements OnInit {
       }];
     } else {
       this.calendarData = Object.keys(currentData).map(k => {
+          if (!currentData[k].details.some((d: LineInfo) => d.title === 'ルミナス')) {
+            // クリアしていなければカウントは無し
+            return {
+              date: new Date(k),
+              count: 0
+            };
+          }
           return {
             date: new Date(k),
             count: Math.floor(currentData[k].total / 5)
