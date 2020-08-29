@@ -1,5 +1,13 @@
 <mat-card class="example-card">
-
+  <div class="calender-area">
+    <app-calendar (dateSelected)="dateSelected($event)" [calendarData]="calendarData"></app-calendar>
+  </div>
+        <div class="to-right">
+          <button mat-raised-button class="btn-small" color="warn" (click)="clearHistory()">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+             履歴を削除
+          </button>
+        </div>
 <input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
 <button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
   <mat-icon>attach_file</mat-icon>
@@ -9,12 +17,16 @@
 <ng-template #fileName>
   <p class="file-name">{{ file?.name }}</p>
 </ng-template>
-<div *ngIf="file">
+<p *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length; else noData" class="meiq-label">{{date.toLocaleDateString()}} の迷宮記録</p>
+<ng-template #noData>
+  <p class="meiq-label"><span *ngIf="date">{{date.toLocaleDateString()}} </span>データがありません</p>
+</ng-template>
+<div *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length">
 <app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
-</div>
-<a *ngIf="meiqRelatedLineInfos" href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
+<a href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
   <span class="twitter_btn">
     <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
   </span>
 </a>
+</div>
 </mat-card>

@@ -1,3 +1,12 @@
 mat-footer-row {
   font-weight: bold;
 }
+
+mat-row,mat-header-row,mat-footer-row {
+  min-height: 2.5em;
+}
+
+mat-table {
+  margin: 10px auto;
+}
+

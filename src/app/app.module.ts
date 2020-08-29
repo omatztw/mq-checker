@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { CalendarHeatmapModule } from 'ng-calendar-heatmap';
+
 /**
  * Angular Material
  */
@@ -44,6 +46,7 @@ import { TableComponent } from './table/table.component';
 import { SdtComponent } from './sdt/sdt.component';
 import { SdtTableComponent } from './sdt-table/sdt-table.component';
 import { StdSummaryTableComponent } from './std-summary-table/std-summary-table.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,8 @@ import { StdSummaryTableComponent } from './std-summary-table/std-summary-table.
     TableComponent,
     SdtComponent,
     SdtTableComponent,
-    StdSummaryTableComponent
+    StdSummaryTableComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +92,8 @@ import { StdSummaryTableComponent } from './std-summary-table/std-summary-table.
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    CalendarHeatmapModule
   ],
   providers: [],
   bootstrap: [AppComponent]

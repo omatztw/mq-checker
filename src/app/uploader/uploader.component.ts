@@ -1,19 +1,27 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import {LineType, LineInfo, MAP_INFO} from '../models/models';
-import { toMinutes, totalTime, getLogDate, fetchDateFromLine } from '../util';
+import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal } from '../util';
+import { CalendarData } from 'ng-calendar-heatmap';
 
 @Component({
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss']
 })
-export class UploaderComponent {
+export class UploaderComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: { nativeElement: { click: () => void; files: { [key: string]: File; }; }; };
 
   file: File | null = null;
   lines: string[];
   meiqRelatedLineInfos: LineInfo[];
+  calendarData: CalendarData[] = [];
+
+  private _date: Date;
+
+  ngOnInit(): void {
+    this.reloadCalendarData();
+  }
 
   onClickFileInputButton(): void {
     this.fileInput.nativeElement.click();
@@ -28,12 +36,20 @@ export class UploaderComponent {
       this.fetchData();
       this.completeLineInfo();
       this.removeDuplicate();
+      this.mergeData();
     };
     reader.readAsText(this.file, 'shift-jis');
   }
 
   get date(): Date {
-    return getLogDate(this.file);
+    if (this.file) {
+      this._date = getLogDate(this.file);
+    }
+    return this._date;
+  }
+
+  set date(date: Date) {
+    this._date = date;
   }
 
   get tweetText(): string {
@@ -53,6 +69,19 @@ export class UploaderComponent {
     }
     text += `%23迷宮チェッカー ${window.location.href}`;
     return text;
+  }
+
+  public dateSelected(event: Date): void {
+    this.loadData(event);
+  }
+
+  public clearHistory(): void {
+    const res = confirm('履歴が全て削除されます。');
+    if (!res) {
+      return;
+    }
+    localStorage.removeItem('mqData');
+    this.reloadCalendarData();
   }
 
   private readLine(str: string): void {
@@ -96,6 +125,55 @@ export class UploaderComponent {
       }
       return c;
     }, undefined);
+  }
+
+  private mergeData(): void {
+    if (!this.meiqRelatedLineInfos.length) {
+      return;
+    }
+    const mqData = {
+      [this.date.toLocaleDateString()]: {
+        total: totalTime(this.meiqRelatedLineInfos),
+        details: this.meiqRelatedLineInfos
+      }
+    };
+    const currentData = Object.assign({}, JSON.parse(localStorage.getItem('mqData')));
+    localStorage.setItem('mqData', JSON.stringify(Object.assign(currentData, mqData)));
+    this.reloadCalendarData();
+  }
+
+  private loadData(date: Date): void {
+    this.meiqRelatedLineInfos = null;
+    this.file = null;
+    const currentData = Object.assign({}, JSON.parse(localStorage.getItem('mqData')));
+    this.date = date;
+    if (this.date && currentData[date.toLocaleDateString()]) {
+      this.meiqRelatedLineInfos = currentData[date.toLocaleDateString()].details.map(d => {
+        const info = new LineInfo();
+        info.title = d.title;
+        info.type = d.type;
+        info.startTime = new Date(d.startTime);
+        info.endTime = new Date(d.endTime);
+        return info;
+      });
+    }
+  }
+
+  private reloadCalendarData(): void {
+    const currentData = JSON.parse(localStorage.getItem('mqData'));
+    if (!currentData) {
+      this.calendarData = [{
+        date: new Date(),
+        count: 0
+      }];
+    } else {
+      this.calendarData = Object.keys(currentData).map(k => {
+          return {
+            date: new Date(k),
+            count: Math.floor(currentData[k].total / 5)
+          };
+        });
+    }
   }
 
 }
