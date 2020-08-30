@@ -229,7 +229,7 @@ export class UploaderComponent implements OnInit {
           }
           return {
             date: new Date(k),
-            count: Math.floor(currentData[k].total / 5)
+            count: Math.max(1, Math.floor((1800 - currentData[k].total) / 60))
           };
         });
     }

@@ -2,6 +2,7 @@
   <div class="calender-area">
     <app-calendar (dateSelected)="dateSelected($event)" [calendarData]="calendarData"></app-calendar>
   </div>
+  <div class="table-area">
   <div class="to-right">
     <input type="file" style="display: none" accept="text/html" #fileImport multiple (change)="onChangeFileImport()"/>
     <button mat-raised-button class="btn-small" color="primary" (click)="onClickFileImportButton()" [disabled]="importing">
@@ -15,7 +16,7 @@
     </button>
   </div>
 <input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
-<button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
+<button mat-raised-button class="file-select-button btn-small" color="primary" (click)="onClickFileInputButton()">
   <mat-icon>attach_file</mat-icon>
    TWログファイルを選択
 </button>
@@ -23,17 +24,18 @@
 <ng-template #fileName>
   <p class="file-name">{{ file?.name }}</p>
 </ng-template>
-<p *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length; else noData" class="meiq-label">{{date.toLocaleDateString()}} の迷宮記録</p>
-<ng-template #noData>
-  <p class="meiq-label"><span *ngIf="date">{{date.toLocaleDateString()}} </span>データがありません</p>
-</ng-template>
-<div *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length">
-<app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
-<a href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
-  <span class="twitter_btn">
-    <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
-  </span>
-</a>
+  <p *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length; else noData" class="meiq-label">{{date.toLocaleDateString()}} の迷宮記録</p>
+  <ng-template #noData>
+    <p class="meiq-label"><span *ngIf="date">{{date.toLocaleDateString()}} </span>データがありません</p>
+  </ng-template>
+  <div *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length">
+    <app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
+    <a href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
+      <span class="twitter_btn">
+        <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
+      </span>
+    </a>
+  </div>
 </div>
 </mat-card>
 

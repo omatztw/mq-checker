@@ -16,19 +16,21 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.calendarOptions = {
+      SQUARE_PADDING: 1,
       responsive: false,
       onClick: this.selected.bind(this),
       colorRange: ['#D8E6E7', '#008000'],
-      tooltipEnabled: false,
+      tooltipEnabled: true,
+      tooltipUnit: 'point',
       legendEnabled: true,
-      max: 360,
+      max: 20,
       locale: {
         months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
         days: ['日', '月', '火', '水', '木', '金', '土'],
         no: 'No',
-        on: 'on',
-        less: '早',
-        more: '遅'
+        on: '',
+        less: '遅',
+        more: '早'
     }
     };
   }
