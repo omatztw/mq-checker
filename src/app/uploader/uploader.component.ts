@@ -2,6 +2,8 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {LineType, LineInfo, MAP_INFO} from '../models/models';
 import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal } from '../util';
 import { CalendarData } from 'ng-calendar-heatmap';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-uploader',
@@ -17,6 +19,7 @@ export class UploaderComponent implements OnInit {
   lines: string[];
   meiqRelatedLineInfos: LineInfo[];
   calendarData: CalendarData[] = [];
+  $importing: Subject<boolean> = new Subject();
 
   private _date: Date;
   private importCount = 0;
@@ -24,6 +27,17 @@ export class UploaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadCalendarData();
+    this.$importing
+    .pipe(
+      debounceTime(500)
+    )
+    .subscribe(
+    next => {
+      this.reloadCalendarData();
+      this.importing = false;
+    },
+    () => console.log('complete')
+    );
   }
 
   onClickFileInputButton(): void {
@@ -45,29 +59,25 @@ export class UploaderComponent implements OnInit {
   }
 
   onClickFileImportButton(): void {
+    this.fileImport.nativeElement.files = null;
     this.fileImport.nativeElement.click();
   }
 
   onChangeFileImport(): void {
     const files: { [key: string]: File } = this.fileImport.nativeElement.files;
     this.importCount = 0;
-    this.importing = true;
+
     Object.keys(files).forEach(k => {
       const reader = new FileReader();
       reader.onload = e => {
-        this.importCount++;
-        if (this.importCount === Object.keys(files).length) {
-          this.importing = false;
-        }
+        this.importing = true;
         const lines = this.splitLines(e.target.result.toString());
         const date = getLogDate(files[k]);
         const lineInfos = this.objectLines(lines, date);
         const completeLineInfos = this.filterLineInfo(lineInfos);
         this.removeDuplicateLines(completeLineInfos);
         this.saveLineData(completeLineInfos, date);
-        if (!this.importing) {
-          this.reloadCalendarData();
-        }
+        this.$importing.next(true);
       };
       reader.readAsText(files[k], 'shift-jis');
     });
