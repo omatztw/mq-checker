@@ -24,17 +24,24 @@
 <ng-template #fileName>
   <p class="file-name">{{ file?.name }}</p>
 </ng-template>
-  <p *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length; else noData" class="meiq-label">{{date.toLocaleDateString()}} の迷宮記録</p>
+  <p *ngIf="meiqInfoList && meiqInfoList.length; else noData" class="meiq-label">{{date.toLocaleDateString()}} の迷宮記録</p>
   <ng-template #noData>
     <p class="meiq-label"><span *ngIf="date">{{date.toLocaleDateString()}} </span>データがありません</p>
   </ng-template>
-  <div *ngIf="meiqRelatedLineInfos && meiqRelatedLineInfos.length">
-    <app-table [meiqRelatedLineInfos]="meiqRelatedLineInfos"></app-table>
-    <a href="https://twitter.com/intent/tweet?text={{tweetText}}" target="_blank" class="twitter-share-button">
-      <span class="twitter_btn">
-        <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
-      </span>
-    </a>
+  <div *ngIf="meiqInfoList && meiqInfoList.length">
+    <mat-button-toggle-group #group="matButtonToggleGroup" value="0">
+      <mat-button-toggle *ngFor="let a of meiqInfoList; index as i" value="{{i}}">
+        {{i+1}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <ng-container *ngFor="let info of meiqInfoList; index as index">
+      <app-table *ngIf="index == group.value" [meiqRelatedLineInfos]="info"></app-table>
+      <a *ngIf="index == group.value" href="https://twitter.com/intent/tweet?text={{tweetText(info)}}" target="_blank" class="twitter-share-button">
+        <span class="twitter_btn">
+          <i class="fa fa-twitter" aria-hidden="true"></i> ツイート
+        </span>
+      </a>
+    </ng-container>
   </div>
 </div>
 </mat-card>

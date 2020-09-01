@@ -18,6 +18,7 @@ export class UploaderComponent implements OnInit {
   file: File | null = null;
   lines: string[];
   meiqRelatedLineInfos: LineInfo[];
+  meiqInfoList: LineInfo[][] = [];
   calendarData: CalendarData[] = [];
   $importing: Subject<boolean> = new Subject();
 
@@ -53,7 +54,9 @@ export class UploaderComponent implements OnInit {
       this.fetchData();
       this.completeLineInfo();
       this.removeDuplicate();
+      this.removeClear();
       this.mergeData();
+      this.loadData(this.date);
     };
     reader.readAsText(this.file, 'shift-jis');
   }
@@ -74,8 +77,9 @@ export class UploaderComponent implements OnInit {
         const lines = this.splitLines(e.target.result.toString());
         const date = getLogDate(files[k]);
         const lineInfos = this.objectLines(lines, date);
-        const completeLineInfos = this.filterLineInfo(lineInfos);
+        let completeLineInfos = this.filterLineInfo(lineInfos);
         this.removeDuplicateLines(completeLineInfos);
+        completeLineInfos = this.removeClearLines(completeLineInfos);
         this.saveLineData(completeLineInfos, date);
         this.$importing.next(true);
       };
@@ -94,20 +98,20 @@ export class UploaderComponent implements OnInit {
     this._date = date;
   }
 
-  get tweetText(): string {
+  public tweetText(meiqInfo: LineInfo[]): string {
     let text = '';
     if (this.date) {
       text += `${this.date.toLocaleDateString()}%0A`;
     }
-    if (this.meiqRelatedLineInfos) {
-      this.meiqRelatedLineInfos.forEach(
+    if (meiqInfo) {
+      meiqInfo.forEach(
         info => {
           const duration = toMinutes(info.duration);
           text += `${duration}  ${info.title}%0A`;
         }
       );
       text += `-------------%0A`;
-      text += `${toMinutes(totalTime(this.meiqRelatedLineInfos))}%0A%0A`;
+      text += `${toMinutes(totalTime(meiqInfo))}%0A%0A`;
     }
     text += `%23迷宮チェッカー ${window.location.href}`;
     return text;
@@ -185,6 +189,14 @@ export class UploaderComponent implements OnInit {
     return infos;
   }
 
+  private removeClear(): void {
+    this.meiqRelatedLineInfos = this.removeClearLines(this.meiqRelatedLineInfos);
+  }
+
+  private removeClearLines(infos: LineInfo[]): LineInfo[] {
+    return infos.filter(info => info.title !== 'クリア');
+  }
+
   private mergeData(): void {
     this.saveLineData(this.meiqRelatedLineInfos, this.date);
     this.reloadCalendarData();
@@ -206,6 +218,7 @@ export class UploaderComponent implements OnInit {
 
   private loadData(date: Date): void {
     this.meiqRelatedLineInfos = null;
+    this.meiqInfoList = [];
     this.file = null;
     const currentData = Object.assign({}, JSON.parse(localStorage.getItem('mqData')));
     this.date = date;
@@ -218,7 +231,26 @@ export class UploaderComponent implements OnInit {
         info.endTime = new Date(d.endTime);
         return info;
       });
+      while (this.meiqRelatedLineInfos.length !== 0) {
+        this.meiqInfoList.push(this.toList(this.meiqRelatedLineInfos));
+      }
     }
+  }
+
+  private toList(infos: LineInfo[]): LineInfo[] {
+    let ret: LineInfo[];
+    const length = infos.length;
+    infos.some((info, index) => {
+      if (index === length - 1) {
+        ret = infos.splice(0, index + 1);
+        return true;
+      }
+      if (infos.findIndex((v) => v.title === info.title) !== index && info.title !== 'ルミ前哨' && info.title !== 'ルミナス'){
+        ret = infos.splice(0, index);
+        return true;
+      }
+    });
+    return ret;
   }
 
   private reloadCalendarData(): void {
@@ -237,9 +269,25 @@ export class UploaderComponent implements OnInit {
               count: 0
             };
           }
+          const dataList = [];
+          const todayData = JSON.parse(JSON.stringify(currentData[k].details));
+          while (todayData.length !== 0) {
+            dataList.push(this.toList(todayData));
+          }
+          const fastest = Math.min(...dataList.filter(data => data.some(d => d.title === 'ルミナス')).map(data => {
+            const lineInfos = data.map((d: LineInfo) => {
+              const lineInfo = new LineInfo();
+              lineInfo.type = d.type;
+              lineInfo.title = d.title;
+              lineInfo.startTime = new Date(d.startTime);
+              lineInfo.endTime = new Date(d.endTime)  ;
+              return lineInfo;
+            });
+            return totalTime(lineInfos);
+          }));
           return {
             date: new Date(k),
-            count: Math.max(1, Math.floor((1860 - currentData[k].total) / 60))
+            count: Math.max(1, Math.floor((1860 - fastest) / 60))
           };
         });
     }
