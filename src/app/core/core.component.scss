@@ -1,0 +1,32 @@
+.example-card {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.container-box {
+  margin-top: 10px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+dt {
+  float: left;
+}
+
+dt::after {
+  content: "：";
+}
+
+.warn {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.no-margin-top {
+  margin-top: 0px;
+}
+.no-margin-bottom {
+  margin-bottom: 0px;
+}

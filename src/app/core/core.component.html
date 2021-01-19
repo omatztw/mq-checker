@@ -1,0 +1,55 @@
+<mat-card class="example-card">
+  <h2 class="warn">
+    ！！計算にはCPUパワーを多く使用します。自己責任でご利用ください！！
+  </h2>
+  <h3 class="no-margin-bottom">仕様</h3>
+  <dl class="no-margin-top">
+    <dt>試行回数</dt>
+    <dd>1,000,000回</dd>
+    <dt>目標確率</dt>
+    <dd>
+      80% (計算結果の材料数で指定したコア数全部が指定段階まで成長する確率が80%)
+    </dd>
+    <dd>※正規分布表より平均値+0.84×標準偏差を計算して80%としています。</dd>
+  </dl>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onCalc()"
+    [disabled]="calclating"
+  >
+    <i class="fa fa-circle-o-notch fa-spin fa-fw" *ngIf="calclating"></i>
+    {{ calclating ? "計算中" : "計算する" }}
+  </button>
+  <div class="container-box">
+    <mat-form-field>
+      <mat-label>現状</mat-label>
+      <mat-select [(ngModel)]="start">
+        <mat-optgroup *ngFor="let group of phaseList" [label]="group.name">
+          <mat-option *ngFor="let v of group.list" [value]="v.value">{{
+            v.name
+          }}</mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>目標</mat-label>
+      <mat-select [(ngModel)]="goal">
+        <mat-optgroup *ngFor="let group of phaseList" [label]="group.name">
+          <mat-option *ngFor="let v of group.list" [value]="v.value">{{
+            v.name
+          }}</mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>強化コア数</mat-label>
+      <input type="number" min="1" max="6" matInput [(ngModel)]="numCore" />
+    </mat-form-field>
+  </div>
+  <div *ngIf="!calclating; else elseBlock" class="container-box">
+    <p>必要粉: {{ math.ceil(needMaterial.powder) }}</p>
+    <p>必要結晶: {{ math.ceil(needMaterial.crystal) }}</p>
+  </div>
+  <ng-template #elseBlock> </ng-template>
+</mat-card>

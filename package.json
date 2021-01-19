@@ -23,8 +23,10 @@
     "@angular/router": "~10.0.3",
     "d3": "^5.1.3",
     "font-awesome": "^4.7.0",
+    "help": "^3.0.2",
     "moment": "^2.27.0",
     "ng-calendar-heatmap": "^0.4.2",
+    "pipe": "^1.1.0",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
