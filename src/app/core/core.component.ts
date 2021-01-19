@@ -211,7 +211,6 @@ export class CoreComponent implements OnInit {
   execute(start: number, goal: number, numCore: number): Material {
     let powderSum = 0;
     let crystalSum = 0;
-    this.calculating = true;
     for (let coreIndex = 0; coreIndex < numCore; coreIndex++) {
       for (let step = start; step < goal; step++) {
         do {
@@ -220,7 +219,6 @@ export class CoreComponent implements OnInit {
         } while (Math.random() >= this.probability[step + 1]);
       }
     }
-    this.calculating = false;
     return {
       powder: powderSum,
       crystal: crystalSum,
