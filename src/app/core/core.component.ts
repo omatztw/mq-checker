@@ -26,9 +26,8 @@ export class CoreComponent implements OnInit {
   start: number;
   goal: number;
   numCore: number;
-  calclating: boolean = false;
+  calculating: boolean = false;
   targetProbability: number = 0.84;
-  calclating$ = new Subject<boolean>();
 
   probabilityList = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 
@@ -178,12 +177,10 @@ export class CoreComponent implements OnInit {
     5,
   ];
 
-  ngOnInit(): void {
-    // this.calclating$.subscribe((b) => (this.calclating = b));
-  }
+  ngOnInit(): void {}
 
   onCalc(): void {
-    this.calclating = true;
+    this.calculating = true;
     this.needMaterial = {
       powder: 0,
       crystal: 0,
@@ -203,7 +200,7 @@ export class CoreComponent implements OnInit {
       const crystalAve = this.average(stepSumCrystal);
       const crystalSigma = this.sigma(stepSumCrystal);
 
-      this.calclating = false;
+      this.calculating = false;
       this.needMaterial = {
         powder: powderAve + this.targetProbability * powderSigma,
         crystal: crystalAve + this.targetProbability * crystalSigma,
@@ -214,16 +211,16 @@ export class CoreComponent implements OnInit {
   execute(start: number, goal: number, numCore: number): Material {
     let powderSum = 0;
     let crystalSum = 0;
-    this.calclating = true;
+    this.calculating = true;
     for (let coreIndex = 0; coreIndex < numCore; coreIndex++) {
       for (let step = start; step < goal; step++) {
         do {
           powderSum += this.powder[step + 1];
           crystalSum += this.crystal[step + 1];
-        } while (Math.random() > this.probability[step + 1]);
+        } while (Math.random() >= this.probability[step + 1]);
       }
     }
-    this.calclating = false;
+    this.calculating = false;
     return {
       powder: powderSum,
       crystal: crystalSum,
