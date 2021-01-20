@@ -25,11 +25,19 @@ export class CoreComponent implements OnInit {
   };
   start: number;
   goal: number;
-  numCore: number;
+  numCore: number = 3;
   calculating: boolean = false;
-  targetProbability: number = 0.84;
+  targetZ: number = 0.84;
 
-  probabilityList = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+  probabilityList = [
+    { probability: '50%', z: 0 },
+    { probability: '60%', z: 0.26 },
+    { probability: '70%', z: 0.52 },
+    { probability: '80%', z: 0.84 },
+    { probability: '90%', z: 1.28 },
+  ];
+
+  numCoreList = [1, 2, 3, 4, 5, 6];
 
   phaseList = [
     {
@@ -202,8 +210,8 @@ export class CoreComponent implements OnInit {
 
       this.calculating = false;
       this.needMaterial = {
-        powder: powderAve + this.targetProbability * powderSigma,
-        crystal: crystalAve + this.targetProbability * crystalSigma,
+        powder: powderAve + this.targetZ * powderSigma,
+        crystal: crystalAve + this.targetZ * crystalSigma,
       };
     }, 100);
   }
