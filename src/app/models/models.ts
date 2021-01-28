@@ -5,7 +5,10 @@ export class LineInfo {
   endTime: Date;
 
   get duration(): number {
-    return (this.endTime.getTime() - this.startTime.getTime()) / 1000;
+    if (this.endTime) {
+      return (this.endTime.getTime() - this.startTime.getTime()) / 1000;
+    }
+    return 0;
   }
 }
 
