@@ -60,7 +60,6 @@ export class UploaderComponent implements OnInit {
       this.completeLineInfo();
       this.removeDuplicate();
       // this.removeClear();
-      console.log(this.meiqRelatedLineInfos);
       this.mergeData();
       this.loadData(this.date);
     };
