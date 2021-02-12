@@ -6,7 +6,8 @@ import {
   getLogDate,
   fetchDateFromLine,
   calcTotal,
-} from '../util';
+  splitLines,
+} from '../util/util';
 import { CalendarData } from 'ng-calendar-heatmap';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -31,6 +32,7 @@ export class UploaderComponent implements OnInit {
   calendarData: CalendarData[] = [];
   $importing: Subject<boolean> = new Subject();
 
+  // tslint:disable-next-line:variable-name
   private _date: Date;
   private importCount = 0;
   importing = false;
@@ -79,10 +81,10 @@ export class UploaderComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.importing = true;
-        const lines = this.splitLines(e.target.result.toString());
+        const lines = splitLines(e.target.result.toString());
         const date = getLogDate(files[k]);
         const lineInfos = this.objectLines(lines, date);
-        let completeLineInfos = this.filterLineInfo(lineInfos);
+        const completeLineInfos = this.filterLineInfo(lineInfos);
         this.removeDuplicateLines(completeLineInfos);
         // completeLineInfos = this.removeClearLines(completeLineInfos);
         this.saveLineData(completeLineInfos, date);
@@ -134,12 +136,8 @@ export class UploaderComponent implements OnInit {
   }
 
   private readLine(str: string): void {
-    const lines = this.splitLines(str);
+    const lines = splitLines(str);
     this.lines = lines;
-  }
-
-  private splitLines(str: string): string[] {
-    return str.split(/\r\n|\n|\r/);
   }
 
   private fetchData(): void {

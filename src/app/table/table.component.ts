@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { totalTime } from '../util';
+import { totalTime } from '../util/util';
 
 @Component({
   selector: 'app-table',

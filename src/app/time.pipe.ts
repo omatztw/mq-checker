@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { toMinutes } from './util';
+import { toMinutes } from './util/util';
 
 @Pipe({
   name: 'time'

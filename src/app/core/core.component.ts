@@ -25,9 +25,9 @@ export class CoreComponent implements OnInit {
   };
   start: number;
   goal: number;
-  numCore: number = 3;
-  calculating: boolean = false;
-  targetZ: number = 0.84;
+  numCore = 3;
+  calculating = false;
+  targetZ = 0.84;
 
   probabilityList = [
     { probability: '50%', z: 0 },
@@ -233,7 +233,7 @@ export class CoreComponent implements OnInit {
     };
   }
 
-  average(data: number[]) {
+  average(data: number[]): number {
     return data.reduce((previous, current) => previous + current) / data.length;
   }
 
@@ -242,7 +242,7 @@ export class CoreComponent implements OnInit {
     return Math.sqrt(
       data
         .map((current) => {
-          let difference = current - average;
+          const difference = current - average;
           return difference ** 2;
         })
         .reduce((previous, current) => previous + current) / data.length

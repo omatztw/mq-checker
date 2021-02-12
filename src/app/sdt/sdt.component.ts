@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {LineType, LineInfo, SDT_MAP_INFO, SdtSummary, SdtScore} from '../models/models';
-import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal, formatDate } from '../util';
+import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal, formatDate, splitLines } from '../util/util';
 
 @Component({
   selector: 'app-sdt',
@@ -104,12 +104,8 @@ export class SdtComponent {
   }
 
   private readLine(str: string): void {
-    const lines = this.splitLines(str);
+    const lines = splitLines(str);
     this.lines = lines;
-  }
-
-  private splitLines(str: string): string[] {
-    return str.split(/\r\n|\n|\r/);
   }
 
   private fetchScore(): void {

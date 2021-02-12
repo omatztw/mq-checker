@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LineInfo, SdtSummary } from '../models/models';
-import { totalTime, calcTotal } from '../util';
+import { totalTime, calcTotal } from '../util/util';
 
 @Component({
   selector: 'app-std-summary-table',
