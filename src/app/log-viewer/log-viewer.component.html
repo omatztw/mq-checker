@@ -21,7 +21,7 @@
       <div *ngIf="isOpenOption">
         <mat-form-field class="example-full-width">
           <mat-label>特別ワード設定</mat-label>
-          <textarea matInput [(ngModel)]="includesText"></textarea>
+          <textarea matInput [(ngModel)]="includesText" (change)="saveIncludes()"></textarea>
         </mat-form-field>
       </div>
       <!-- <div class="container">

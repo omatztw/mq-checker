@@ -32,6 +32,10 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     return splitLines(this.includesText).filter(s => !!s);
   }
 
+  set includes(str: string[]) {
+    this.includesText = str.join('\n');
+  }
+
   displayedColumns = ['date', 'time', 'login', 'name', 'message'];
 
   chatTypeSelections = [
@@ -134,6 +138,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     //   this.dataSource.data = this.history;
     // });
     this.loadChatSelections();
+    this.loadIncludes();
   }
 
   loadString(s: string): void {
@@ -175,6 +180,17 @@ export class LogViewerComponent implements OnInit, OnDestroy {
 
   saveChatSelections(): void {
     localStorage.setItem('chatSelections', JSON.stringify(this.chatTypeSelections));
+  }
+
+  loadIncludes(): void {
+    const stored = JSON.parse(localStorage.getItem('chatIncludes'));
+    if (stored) {
+      this.includes = stored;
+    }
+  }
+
+  saveIncludes(): void {
+    localStorage.setItem('chatIncludes', JSON.stringify(this.includes));
   }
 
   onCheckSelection(): void {
