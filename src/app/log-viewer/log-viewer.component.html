@@ -1,0 +1,70 @@
+<ng-container *ngIf="supported; else unsupported">
+  <div class="header-container">
+    <button mat-raised-button class="file-select-button" color="primary" [disabled]="timer" (click)="onClick($event)">
+      {{timer? 'ログ取得中です...' : 'TalesWeaverのフォルダを選択 (例：C:\\Nexon\\TalesWeaver)'}}
+    </button>
+    <div *ngIf="calclating">
+      計算中
+    </div>
+    <section class="example-section">
+      <mat-checkbox *ngFor="let chatInfo of chatTypeSelections" class="example-margin" [(ngModel)]="chatInfo.display" (change)="onCheckSelection()">{{chatInfo.name}}</mat-checkbox>
+    </section>
+    <div>
+      <mat-label>特別ワード</mat-label>
+      {{includes | json}}
+    </div>
+      <div>
+        <button mat-button class="left"  color="basic" aria-label="Example icon button with a menu icon" (click)="toggleShowOption()">
+          <mat-icon>menu</mat-icon>詳細設定
+        </button>
+      </div>
+      <div *ngIf="isOpenOption">
+        <mat-form-field class="example-full-width">
+          <mat-label>特別ワード設定</mat-label>
+          <textarea matInput [(ngModel)]="includesText"></textarea>
+        </mat-form-field>
+      </div>
+      <!-- <div class="container">
+        <ul>
+          <li *ngFor="let line of filteredHistory" [ngStyle]="{'color': line.color}">
+            {{line.name ? line.name + ':' : ''}} {{line.message}} {{line.currentChar}}
+          </li>
+        </ul>
+      </div> -->
+      <mat-form-field>
+        <mat-label>検索</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+      </mat-form-field>
+    </div>
+    <mat-table [dataSource]="filteredData" class="mat-elevation-z2 main-container" color="primary">
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef [ngClass]="'col-short'" > 日付 </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.color}" [ngClass]="'col-short'" > {{element.time.toLocaleDateString()}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef [ngClass]="'col-short'" > 時刻 </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.color}" [ngClass]="'col-short'" > {{element.time.toLocaleTimeString()}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="login">
+        <mat-header-cell *matHeaderCellDef [ngClass]="'col-mid'" > ログイン </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.color}" [ngClass]="'col-mid'" > {{element.currentChar}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef [ngClass]="'col-mid'" > 発言 </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.color}" [ngClass]="'col-mid'" > {{element.name || ''}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="message">
+        <mat-header-cell *matHeaderCellDef> 内容 </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.color}"> {{element.message}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </ng-container>
+  <ng-template #unsupported>
+    <div >このブラウザは対応していません(´・ω・`)(´・ω・`)</div>
+  </ng-template>

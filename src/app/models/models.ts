@@ -32,6 +32,19 @@ export enum LineType {
   clear,
   offline,
 }
+export const ChatType = {
+  Club: '#94ddfa',
+  Team: '#f7b73c',
+  General: '#ffffff',
+  GeneralOwn: '#c8ffc8',
+  System: '#ff64ff',
+  Gm: '#c8ffff',
+  Dm: '#64ff64',
+  Management: '#64ff80',
+  Shout: '#c896c8'
+} as const;
+
+export type ChatType = typeof ChatType[keyof typeof ChatType];
 
 export const MAP_INFO = [
   {

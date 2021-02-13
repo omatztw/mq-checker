@@ -1,0 +1,36 @@
+<mat-card class="card-container">
+  <ng-container *ngIf="supported; else unsupported">
+
+    <button mat-raised-button class="file-select-button" color="primary" [disabled]="timer" (click)="onClick($event)">
+      {{timer? '記録中です...' : 'TalesWeaverのフォルダを選択 (例：C:\\Nexon\\TalesWeaver)'}}
+    </button>
+    <mat-progress-bar *ngIf="timer" mode="indeterminate"></mat-progress-bar>
+    <mat-table [dataSource]="history" class="mat-elevation-z2" color="primary">
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef> 日付 </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.time.toLocaleDateString()}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef> 時刻 </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.time.toLocaleTimeString()}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="server">
+        <mat-header-cell *matHeaderCellDef> サーバー </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.server}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> キャラ名 </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </ng-container>
+  <ng-template #unsupported>
+    <div >このブラウザは対応していません(´・ω・`)(´・ω・`)</div>
+  </ng-template>
+</mat-card>
+

@@ -1,3 +1,4 @@
+import { Charactor } from '../models/char';
 import { LineInfo } from '../models/models';
 
 export const toMinutes = (second: number): string => {
@@ -71,4 +72,18 @@ export const formatDate = (date: Date, format: string): string => {
 
 export const splitLines = (str: string): string[] => {
   return str.split(/\r\n|\n|\r/);
+};
+
+export const parseChar = (fileName: string, fileLastModified: number): Charactor  => {
+  const regex = fileName.match(/(.+)_(.+).profile/);
+  const server = regex[1];
+  const name = regex[2];
+  const time = new Date(fileLastModified);
+  return {
+    server, name, time
+  };
+ };
+
+export const isNativeFileSystemSupported = (): boolean => {
+  return 'showDirectoryPicker' in window;
 };

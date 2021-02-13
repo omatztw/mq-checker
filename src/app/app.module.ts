@@ -50,6 +50,8 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { CoreComponent } from './core/core.component';
 import { PhasePipe } from './phase.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoginHistoryComponent } from './login-history/login-history.component';
+import { LogViewerComponent } from './log-viewer/log-viewer.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CalendarComponent,
     CoreComponent,
     PhasePipe,
+    LoginHistoryComponent,
+    LogViewerComponent,
   ],
   imports: [
     BrowserModule,

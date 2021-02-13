@@ -1,0 +1,17 @@
+.card-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+mat-footer-row {
+  font-weight: bold;
+}
+
+mat-row,mat-header-row,mat-footer-row {
+  min-height: 2em;
+}
+
+mat-table {
+  margin: 10px auto;
+}
+

@@ -1,0 +1,52 @@
+.main-container {
+  background-color:#0C0C0C;
+  display: block;
+  min-height: 100%;
+  margin-left: 12px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  // height: 60px;
+  padding: 5px 0px;
+}
+
+.header-container {
+  margin-left: 12px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.left {
+  padding-left: 0px;
+}
+
+// mat-table {
+//   max-width: 100%;
+//   margin: 10px auto;
+// }
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+mat-header-cell {
+  color: #fff;
+}
+
+mat-row,mat-header-row,mat-footer-row {
+  min-height: 1.5em;
+}
+
+.col-short{
+  flex: 0 0 75px;
+}
+
+.col-mid{
+  flex: 0 0 120px;
+}
