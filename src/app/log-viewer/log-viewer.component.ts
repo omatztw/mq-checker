@@ -153,7 +153,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
         } else {
           this.history = [line, ...this.history];
         }
-        this.history = this.history.slice(0, 10000);
+        this.history = this.history.slice(0, 5000);
         this.dataSource.data = this.history;
       }
     });
