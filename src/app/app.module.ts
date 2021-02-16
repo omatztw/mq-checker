@@ -52,6 +52,7 @@ import { PhasePipe } from './phase.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginHistoryComponent } from './login-history/login-history.component';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { LogViewerComponent } from './log-viewer/log-viewer.component';
     PhasePipe,
     LoginHistoryComponent,
     LogViewerComponent,
+    TaskComponent,
   ],
   imports: [
     BrowserModule,

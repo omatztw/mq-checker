@@ -1,0 +1,56 @@
+.example-card {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.twitter_btn {
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 4px;
+  background-color: #1b95e0;
+  border-color: #1b95e0;
+  color: white;
+  font-size: 12px;
+  font-weight: normal;
+  cursor: pointer;
+  display: inline-block;
+  height: 12px;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 100%;
+}
+
+.flex-c {
+  display: flex;
+  margin: 5px 0px;
+  align-items: center;     /*上下中央揃え*/
+}
+
+.ml-5 {
+  margin-left: 10px;
+}
+
+.flex-1 {
+  width: 4em;
+}
+
+.flex-2 {
+  width: 12em;
+}
+
+.flex-3 {
+  width: 38em;
+}
+
+
+.w-50 {
+  width: 8em;
+}
+
+.w-80 {
+  width: 34em;
+}
+
+.bold {
+  font-weight: bold;
+}

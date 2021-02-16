@@ -1,5 +1,6 @@
 import { Charactor } from '../models/char';
-import { LineInfo } from '../models/models';
+import { Line } from '../models/line';
+import { ChatType, LineInfo } from '../models/models';
 
 export const toMinutes = (second: number): string => {
     const minutes = Math.floor(second / 60);
@@ -86,4 +87,17 @@ export const parseChar = (fileName: string, fileLastModified: number): Charactor
 
 export const isNativeFileSystemSupported = (): boolean => {
   return 'showDirectoryPicker' in window;
+};
+
+export const parseLine = (line: string): Line => {
+  const lineInfo = new Line();
+  const match = line.match(/(\[ *\d+時 *\d+分 *\d+秒 *\]).+color="(#[0-9a-f]+)">(.+)<\/font>/);
+  if (match) {
+    const content = match[3];
+    lineInfo.message = content;
+    lineInfo.time = fetchDateFromLine(match[1], new Date());
+    lineInfo.color = match[2];
+    return lineInfo;
+  }
+  return;
 };

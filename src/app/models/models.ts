@@ -1,3 +1,19 @@
+export class Task {
+  title: string;
+  content: string;
+  times: Date[];
+  get count(): number {
+    return this.times.length;
+  }
+
+  constructor() {
+    this.title = '';
+    this.content = '';
+    this.times = [];
+  }
+
+}
+
 export class LineInfo {
   title: string;
   type: LineType;
