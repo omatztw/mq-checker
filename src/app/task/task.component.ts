@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Line } from '../models/line';
 import { LineInfo, SdtScore, Task } from '../models/models';
@@ -9,7 +9,7 @@ import { getLogDate, isNativeFileSystemSupported, parseLine, splitLines } from '
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss']
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -41,6 +41,10 @@ export class TaskComponent implements OnInit {
       this.fileInput.nativeElement.value = null;
     };
 
+  }
+
+  ngOnDestroy(): void {
+    this.clearTimer();
   }
 
   addItem(): void {
@@ -100,7 +104,9 @@ export class TaskComponent implements OnInit {
   }
 
   private clearTimer(): void {
-    clearInterval(this.timer);
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
     this.timer = undefined;
   }
 
