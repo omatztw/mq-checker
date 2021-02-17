@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Line } from '../models/line';
 import { LineInfo, SdtScore, Task } from '../models/models';
@@ -11,7 +11,7 @@ import { getLogDate, parseLine, splitLines } from '../util/util';
 })
 export class TaskComponent implements OnInit {
 
-  @ViewChild('fileInput') fileInput: { nativeElement: { click: () => void; files: { [key: string]: File; }; }; };
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   file: File | null = null;
   lines: string[];
@@ -51,6 +51,7 @@ export class TaskComponent implements OnInit {
       this.readLine(e.target.result.toString());
       this.parsedLines = this.lines.map(l => parseLine(l)).filter(l => l !== undefined);
       this.fillDate();
+      this.fileInput.nativeElement.value = null;
     };
     reader.readAsText(this.file, 'shift-jis');
   }
