@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Line } from '../models/line';
 import { LineInfo, SdtScore, Task } from '../models/models';
-import { getLogDate, parseLine, splitLines } from '../util/util';
+import { getLogDate, isNativeFileSystemSupported, parseLine, splitLines } from '../util/util';
 
 @Component({
   selector: 'app-task',
@@ -21,6 +21,10 @@ export class TaskComponent implements OnInit {
   sdtScore: SdtScore;
   parsedLines: Line[];
   tasks: Task[] = [];
+  fileHandle: any;
+  timer: number;
+  reader: FileReader;
+  supported = isNativeFileSystemSupported();
 
   constructor() { }
 
@@ -28,6 +32,15 @@ export class TaskComponent implements OnInit {
     this.tasks.push(new Task());
     this.loadTasks();
     this.loadShowSettings();
+
+    this.reader = new FileReader();
+    this.reader.onload = e => {
+      this.readLine(e.target.result.toString());
+      this.parsedLines = this.lines.map(l => parseLine(l)).filter(l => l !== undefined);
+      this.fillDate();
+      this.fileInput.nativeElement.value = null;
+    };
+
   }
 
   addItem(): void {
@@ -43,17 +56,58 @@ export class TaskComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
+  async onClick(e: any): Promise<void> {
+
+    const options = {
+      types: [
+        {
+          description: 'TW ChatLog',
+          accept: {
+            'text/html': ['.html'],
+          },
+        },
+      ],
+    };
+    [this.fileHandle] = await (window as any).showOpenFilePicker(options);
+    if (this.timer) {
+      this.clearTimer();
+    }
+    this.file = await this.fileHandle.getFile();
+    this.readText();
+    if (this.isToday(this.file)) {
+      this.timer = setInterval(async () => {
+        this.file = await this.fileHandle.getFile();
+        if (!this.isToday(this.file)) {
+          this.clearTimer();
+        }
+        this.readText();
+      }, 30000);
+    }
+  }
+
+  private isToday(file: File): boolean {
+    const cDate = getLogDate(file);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return cDate.getTime() === today.getTime();
+  }
+
+  private readText(): void {
+    if (!this.file){
+      return;
+    }
+    this.reader.readAsText(this.file, 'shift-jis');
+  }
+
+  private clearTimer(): void {
+    clearInterval(this.timer);
+    this.timer = undefined;
+  }
+
   onChangeFileInput(): void {
     const files: { [key: string]: File } = this.fileInput.nativeElement.files;
     this.file = files[0];
-    const reader = new FileReader();
-    reader.onload = e => {
-      this.readLine(e.target.result.toString());
-      this.parsedLines = this.lines.map(l => parseLine(l)).filter(l => l !== undefined);
-      this.fillDate();
-      this.fileInput.nativeElement.value = null;
-    };
-    reader.readAsText(this.file, 'shift-jis');
+    this.readText();
   }
 
   get date(): Date {

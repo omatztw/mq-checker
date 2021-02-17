@@ -2,10 +2,20 @@
 <mat-card class="example-card">
 
   <input type="file" style="display: none" #fileInput accept="text/html" (change)="onChangeFileInput()" />
-  <button mat-raised-button class="file-select-button" color="primary" (click)="onClickFileInputButton()">
-    <mat-icon>attach_file</mat-icon>
-     TWログファイルを選択
-  </button>
+  <div class="flex-c">
+    <button mat-raised-button class="file-select-button" *ngIf="supported" color="primary" (click)="onClick($event)">
+      <mat-icon>attach_file</mat-icon>
+      TWログファイルを選択
+    </button>
+    <button mat-raised-button class="file-select-button" *ngIf="!supported" color="primary" (click)="onClickFileInputButton($event)">
+      <mat-icon>attach_file</mat-icon>
+      TWログファイルを選択
+    </button>
+    <div class="ml-5" *ngIf="timer !== undefined">
+      <i class="fa fa-play" aria-hidden="true"></i> 自動更新中...
+    </div>
+  </div>
+
   <p class="file-name" *ngIf="!file; else fileName">ファイルが選択されていません</p>
   <ng-template #fileName>
     <p class="file-name">{{ file?.name }}</p>
