@@ -48,7 +48,8 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   addItem(): void {
-      this.tasks.push(new Task());
+    this.showSettings = true;
+    this.tasks.push(new Task());
   }
 
   removeItem(index: number): void {
