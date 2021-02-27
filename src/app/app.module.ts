@@ -53,6 +53,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginHistoryComponent } from './login-history/login-history.component';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { TaskComponent } from './task/task.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { TaskComponent } from './task/task.component';
     LoginHistoryComponent,
     LogViewerComponent,
     TaskComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
