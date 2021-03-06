@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { Line } from '../models/line';
-import { fetchDateFromLine, getLogDate, isNativeFileSystemSupported, parseChar, splitLines } from '../util/util';
+import { fetchDateFromLine, getLogDate, isNativeFileSystemSupported, isSpeechSupported, parseChar, splitLines } from '../util/util';
 import { ChatType } from '../models/models';
 import { Charactor } from '../models/char';
 import { MatTableDataSource } from '@angular/material/table';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -24,9 +25,11 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Line> = new MatTableDataSource();
   isOpenOption = false;
   calclating = false;
+  voiceEnabled = false;
   includesText = '';
 
   supported = isNativeFileSystemSupported();
+  voiceSupported = isSpeechSupported();
 
   get includes(): string[] {
     return splitLines(this.includesText).filter(s => !!s);
@@ -54,11 +57,11 @@ export class LogViewerComponent implements OnInit, OnDestroy {
       colors: [ChatType.General, ChatType.GeneralOwn],
       display: false
     },
-    {
-      name: 'システム',
-      colors: [ChatType.System, ChatType.Management],
-      display: false
-    },
+    // {
+    //   name: 'システム',
+    //   colors: [ChatType.System, ChatType.Management],
+    //   display: false
+    // },
     {
       name: '耳打ち',
       colors: [ChatType.Dm],
@@ -82,20 +85,20 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   }
 
   get filteredData(): MatTableDataSource<Line> {
-    // return this.history;
-    this.dataSource.data = this.history.filter(h => {
-      if (this.includes.some(inc => {
-        const regexp = new RegExp(inc);
-        return regexp.test(h.message);
-      })){
-        return true;
-      }
-      if (this.filteringColors.some(c => c === h.color)) {
-        return true;
-      }
-      return false;
-    });
+    // return this.dataSource;
+    this.dataSource.data = this.history.filter(this.filterLine.bind(this));
     return this.dataSource;
+  }
+
+  filterLine(line: Line): boolean {
+    const include = this.includes.some(inc => {
+      const regexp = new RegExp(inc);
+      return regexp.test(line.message);
+    });
+    if (include) {
+      return true;
+    }
+    return this.filteringColors.some(c => c === line.color);
   }
 
   updateData(): void {
@@ -137,21 +140,29 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     //   this.history = this.history.slice(0, 1000);
     //   this.dataSource.data = this.history;
     // });
+    this.subscription = this.lineEmitter.pipe(filter(this.filterLine.bind(this))).subscribe(l => {
+      if (this.voiceEnabled) {
+        const u = new SpeechSynthesisUtterance((l.name ? `${l.name}:` : '') + l.message);
+        u.lang = 'ja';
+        window.speechSynthesis.speak(u);
+      }
+    });
     this.loadChatSelections();
     this.loadIncludes();
+    this.loadVoiceSelections();
   }
 
   loadString(s: string): void {
     this.calclating = true;
     const lines = splitLines(s);
-    lines.forEach(l => {
-      const line = this.parseLine(l);
-      if (line) {
-        this.lineEmitter.next(line);
-        if (line.message.includes('&nbsp')) {
-          this.history[0].message += line.message.replace(/&nbsp/g, '').trim();
+    lines.map(this.parseLine.bind(this)).filter(l => !!l).forEach((l: Line) => {
+      // const line = this.parseLine(l);
+      if (l) {
+        this.lineEmitter.next(l);
+        if (l.message.includes('&nbsp')) {
+          this.history[0].message += l.message.replace(/&nbsp/g, '').trim();
         } else {
-          this.history = [line, ...this.history];
+          this.history = [l, ...this.history];
         }
         this.history = this.history.slice(0, 2000);
         this.dataSource.data = this.history;
@@ -182,6 +193,17 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     localStorage.setItem('chatSelections', JSON.stringify(this.chatTypeSelections));
   }
 
+  loadVoiceSelections(): void {
+    const stored = JSON.parse(localStorage.getItem('options'));
+    if (stored) {
+      this.voiceEnabled = stored.voiceEnabled;
+    }
+  }
+
+  saveVoiceSelections(): void {
+    localStorage.setItem('options', JSON.stringify({voiceEnabled: this.voiceEnabled}));
+  }
+
   loadIncludes(): void {
     const stored = JSON.parse(localStorage.getItem('chatIncludes'));
     if (stored) {
@@ -195,6 +217,10 @@ export class LogViewerComponent implements OnInit, OnDestroy {
 
   onCheckSelection(): void {
     this.saveChatSelections();
+  }
+
+  onCheckVoiceEnable(): void {
+    this.saveVoiceSelections();
   }
 
   toggleShowOption(): void {
@@ -237,6 +263,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
                       text = await blob.arrayBuffer();
                     } catch (err) {
                       // 読み込みできなかった場合は次のターンに回す
+                      console.error(err);
                       continue;
                     }
                     curPos = fileSize;

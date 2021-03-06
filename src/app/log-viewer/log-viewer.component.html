@@ -31,10 +31,14 @@
           </li>
         </ul>
       </div> -->
+      <section *ngIf="voiceSupported" class="example-section">
+        <mat-checkbox class="example-margin" [(ngModel)]="voiceEnabled" (change)="onCheckVoiceEnable()">読み上げ有効</mat-checkbox>
+      </section>
       <mat-form-field>
         <mat-label>検索</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input>
       </mat-form-field>
+      <p>履歴</p>
     </div>
     <mat-table [dataSource]="filteredData" class="mat-elevation-z2 main-container" color="primary">
       <ng-container matColumnDef="date">

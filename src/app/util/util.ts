@@ -89,6 +89,10 @@ export const isNativeFileSystemSupported = (): boolean => {
   return 'showDirectoryPicker' in window;
 };
 
+export const isSpeechSupported = (): boolean => {
+  return 'speechSynthesis' in window;
+};
+
 export const parseLine = (line: string): Line => {
   const lineInfo = new Line();
   const match = line.match(/(\[ *\d+時 *\d+分 *\d+秒 *\]).+color="(#[0-9a-f]+)">(.+)<\/font>/);
