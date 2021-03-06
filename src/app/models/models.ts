@@ -1,15 +1,17 @@
 export class Task {
   title: string;
   content: string;
-  times: Date[];
+  details: {time: Date, message: string}[];
+  showDetail: boolean;
   get count(): number {
-    return this.times.length;
+    return this.details.length;
   }
 
   constructor() {
     this.title = '';
     this.content = '';
-    this.times = [];
+    this.showDetail = false;
+    this.details = [];
   }
 
 }

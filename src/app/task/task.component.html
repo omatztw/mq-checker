@@ -23,16 +23,21 @@
   <div>
     <p *ngIf="file" class="bold">{{date.toLocaleDateString()}} の課題記録</p>
     <mat-slide-toggle [(ngModel)]="showSettings" (change)="onChange(false)">文字列設定を表示</mat-slide-toggle>
-    <div *ngFor="let item of tasks; let i = index" class="flex-c">
-      <button class="flex-1" (click)="removeItem(i)">削除</button>
-      <div class="ml-5 flex-2">
-        日課: <input class="w-50" [(ngModel)]="item.title" (change)="onChange(false)" type="text" >
+    <div *ngFor="let item of tasks; let i = index">
+      <div class="flex-c">
+        <button class="flex-1" (click)="removeItem(i)">削除</button>
+        <div class="ml-5 flex-2">
+          日課: <input class="w-50" [(ngModel)]="item.title" (change)="onChange(false)" type="text" >
+        </div>
+        <div class="flex-3" *ngIf="showSettings">
+          文字列: <input class="w-80"  [(ngModel)]="item.content" (change)="onChange(true)"  type="text" >
+        </div>
+        <button mat-button  color="basic" class="count-item bold" (click)="onShowDetail(item)"><mat-icon>menu</mat-icon> {{item.count}} 回</button>
       </div>
-      <div class="flex-3" *ngIf="showSettings">
-        文字列: <input class="w-80"  [(ngModel)]="item.content" (change)="onChange(true)"  type="text" >
-      </div>
-      <div class="flex-1 bold">
-        {{item.count}} 回
+      <div *ngIf="item.showDetail && item.count !== 0" class="flex-c">
+        <ul>
+          <li *ngFor="let d of item.details">[{{d.time.toLocaleTimeString()}}] {{d.message}}</li>
+        </ul>
       </div>
     </div>
     <button (click)="addItem()">ルールを追加</button>

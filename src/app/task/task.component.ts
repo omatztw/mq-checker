@@ -18,6 +18,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   form: FormGroup;
   sdtRelatedLineInfos: LineInfo[];
   showSettings = true;
+  showDetail = false;
   sdtScore: SdtScore;
   parsedLines: Line[];
   tasks: Task[] = [];
@@ -59,6 +60,10 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   onClickFileInputButton(): void {
     this.fileInput.nativeElement.click();
+  }
+
+  onShowDetail(task: Task): void {
+    task.showDetail = !task.showDetail;
   }
 
   async onClick(e: any): Promise<void> {
@@ -152,10 +157,15 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private fillDate(): void {
     this.tasks.filter(t => !!t.content).forEach(task => {
-      task.times = this.parsedLines.filter(l => {
+      task.details = this.parsedLines.filter(l => {
         const regexp = new RegExp(task.content);
         return regexp.test(l.message);
-      }).map(l => l.time);
+      }).map(l => {
+        return {
+          time: l.time,
+          message: l.message
+        };
+      });
     });
   }
 
