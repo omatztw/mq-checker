@@ -24,6 +24,9 @@ export class UploaderComponent implements OnInit {
   @ViewChild('fileImport') fileImport: {
     nativeElement: { click: () => void; files: { [key: string]: File } };
   };
+  @ViewChild('fileJsonImport') fileJsonImport: {
+    nativeElement: { click: () => void; value: any; files: { [key: string]: File } };
+  };
 
   file: File | null = null;
   lines: string[];
@@ -73,6 +76,33 @@ export class UploaderComponent implements OnInit {
     this.fileImport.nativeElement.click();
   }
 
+  onClickJsonFileImportButton(): void {
+    this.fileJsonImport.nativeElement.files = null;
+    this.fileJsonImport.nativeElement.click();
+  }
+  onClickJsonFileExportButton(): void {
+    const filename = `mqData.json`;
+    const data = localStorage.getItem('mqData');
+    const blob = new Blob([data], {type: 'application/json'});
+
+    if (window.navigator.msSaveBlob) { // IE
+      window.navigator.msSaveBlob(blob, filename);
+    } else { // その他ブラウザ
+        // BlobからオブジェクトURLを作成する
+        const url = (window.URL || window.webkitURL).createObjectURL(blob);
+        // ダウンロード用にリンクを作成する
+        const download = document.createElement('a');
+        // リンク先に上記で生成したURLを指定する
+        download.href = url;
+        // download属性にファイル名を指定する
+        download.download = filename;
+        // 作成したリンクをクリックしてダウンロードを実行する
+        download.click();
+        // createObjectURLで作成したオブジェクトURLを開放する
+        (window.URL || window.webkitURL).revokeObjectURL(url);
+    }
+  }
+
   onChangeFileImport(): void {
     const files: { [key: string]: File } = this.fileImport.nativeElement.files;
     this.importCount = 0;
@@ -91,6 +121,21 @@ export class UploaderComponent implements OnInit {
         this.$importing.next(true);
       };
       reader.readAsText(files[k], 'shift-jis');
+    });
+  }
+  onChangeJsonFileImport(): void {
+    const files: { [key: string]: File } = this.fileJsonImport.nativeElement.files;
+
+    Object.keys(files).forEach((k) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.importing = true;
+        const date = e.target.result.toString();
+        this.mergeJsonData(JSON.parse(date));
+        this.$importing.next(true);
+        this.fileJsonImport.nativeElement.value = null;
+      };
+      reader.readAsText(files[k], 'utf-8');
     });
   }
 
@@ -215,6 +260,10 @@ export class UploaderComponent implements OnInit {
         details: infos,
       },
     };
+    this.mergeJsonData(mqData);
+  }
+
+  private mergeJsonData(mqData): void {
     const currentData = Object.assign(
       {},
       JSON.parse(localStorage.getItem('mqData'))

@@ -1,8 +1,19 @@
 <mat-card class="example-card">
+  <div class="to-right">
+    <input type="file" style="display: none" accept="text/json" #fileJsonImport (change)="onChangeJsonFileImport()"/>
+    <button mat-mini-fab color="primary" (click)="onClickJsonFileImportButton()"  [disabled]="importing" matTooltip="json形式のデータをインポート" matTooltipPosition="above">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+    <button mat-mini-fab color="primary" (click)="onClickJsonFileExportButton()" [disabled]="importing" matTooltip="json形式のデータをエクスポート" matTooltipPosition="above">
+      <i class="fa fa-download" aria-hidden="true"></i>
+    </button>
+  </div>
   <div class="calender-area">
     <app-calendar (dateSelected)="dateSelected($event)" [calendarData]="calendarData"></app-calendar>
   </div>
   <div class="table-area">
+    <div class="to-right">
+    </div>
   <div class="to-right">
     <input type="file" style="display: none" accept="text/html" #fileImport multiple (change)="onChangeFileImport()"/>
     <button mat-raised-button class="btn-small" color="primary" (click)="onClickFileImportButton()" [disabled]="importing">
