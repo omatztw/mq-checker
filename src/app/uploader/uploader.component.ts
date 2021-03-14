@@ -129,11 +129,17 @@ export class UploaderComponent implements OnInit {
     Object.keys(files).forEach((k) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.importing = true;
-        const date = e.target.result.toString();
-        this.mergeJsonData(JSON.parse(date));
+        try {
+          this.importing = true;
+          const date = e.target.result.toString();
+          this.mergeJsonData(JSON.parse(date));
+        } finally {
+          this.$importing.next(true);
+          this.fileJsonImport.nativeElement.value = null;
+        }
+      };
+      reader.onerror = (e) => {
         this.$importing.next(true);
-        this.fileJsonImport.nativeElement.value = null;
       };
       reader.readAsText(files[k], 'utf-8');
     });

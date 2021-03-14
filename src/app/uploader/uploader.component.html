@@ -1,6 +1,6 @@
 <mat-card class="example-card">
   <div class="to-right">
-    <input type="file" style="display: none" accept="text/json" #fileJsonImport (change)="onChangeJsonFileImport()"/>
+    <input type="file" style="display: none" accept="application/json" #fileJsonImport (change)="onChangeJsonFileImport()"/>
     <button mat-mini-fab color="primary" (click)="onClickJsonFileImportButton()"  [disabled]="importing" matTooltip="json形式のデータをインポート" matTooltipPosition="above">
       <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
