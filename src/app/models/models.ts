@@ -38,6 +38,7 @@ export class SdtSummary {
   max: number;
   ave: number;
   subScore: number;
+  bonus: number;
 }
 
 export class SdtScore {

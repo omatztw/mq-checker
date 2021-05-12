@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {LineType, LineInfo, SDT_MAP_INFO, SdtSummary, SdtScore} from '../models/models';
-import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal, formatDate, splitLines } from '../util/util';
+import { toMinutes, totalTime, getLogDate, fetchDateFromLine, calcTotal, formatDate, splitLines, calcClearBonus } from '../util/util';
 
 @Component({
   selector: 'app-sdt',
@@ -82,7 +82,9 @@ export class SdtComponent {
       if (summary.count) {
         summary.min = Math.min(...currentMapInfo.map(cinfo => cinfo.duration));
         summary.max = Math.max(...currentMapInfo.map(cinfo => cinfo.duration));
-        summary.subScore = currentMapInfo.reduce((p, c) => p + c.score, 0);
+        summary.subScore = calcTotal(currentMapInfo.map(c => c.score));
+        summary.bonus = calcTotal(currentMapInfo.map(c => calcClearBonus(c.duration)));
+        
         summary.ave = parseFloat((totalTime(currentMapInfo) / currentMapInfo.length).toFixed(2));
       }
       return summary;

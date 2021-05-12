@@ -26,6 +26,25 @@ export const calcTotal = (numbers: number[]): number => {
   return 0;
 };
 
+export const calcClearBonus = (duration: number): number => {
+  if(duration <= 10 ) {
+    return 5;
+  } 
+  else if(duration <= 20) {
+    return 4;
+  }
+  else if(duration <= 30) {
+    return 3;
+  }
+  else if(duration <= 40) {
+    return 2;
+  }
+  else if(duration <= 60) {
+    return 1;
+  }
+  return 0;
+}
+
 export const getLogDate = (file: File): Date => {
   if (file) {
     const dateRe = file.name.match(/TWChatLog_(\d\d\d\d)_(\d\d)_(\d\d).html/);

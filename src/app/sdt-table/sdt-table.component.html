@@ -22,6 +22,12 @@
     <mat-cell *matCellDef="let element"> {{element.score}} </mat-cell>
     <mat-footer-cell mat-footer-cell *matFooterCellDef> {{getTotalScore()}} </mat-footer-cell>
   </ng-container>
+
+  <ng-container matColumnDef="bonus">
+    <mat-header-cell *matHeaderCellDef> Bonus Score </mat-header-cell>
+    <mat-cell *matCellDef="let element"> (+{{calcClearBonus(element.duration)}}) </mat-cell>
+    <mat-footer-cell mat-footer-cell *matFooterCellDef> (+{{getTotalBonus()}}) </mat-footer-cell>
+  </ng-container>
   
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

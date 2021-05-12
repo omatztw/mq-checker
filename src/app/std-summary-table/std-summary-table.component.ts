@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LineInfo, SdtSummary } from '../models/models';
-import { totalTime, calcTotal } from '../util/util';
+import { totalTime, calcTotal, calcClearBonus } from '../util/util';
 
 @Component({
   selector: 'app-std-summary-table',
@@ -10,7 +10,7 @@ import { totalTime, calcTotal } from '../util/util';
 export class StdSummaryTableComponent implements OnInit {
 
   @Input() sdtSummary: SdtSummary[];
-  displayedColumns = ['title', 'count', 'min', 'max', 'ave', 'score'];
+  displayedColumns = ['title', 'count', 'min', 'max', 'ave', 'score', 'bonus'];
 
   constructor() { }
 
@@ -29,6 +29,11 @@ export class StdSummaryTableComponent implements OnInit {
       return calcTotal(this.sdtSummary.map(s => s.subScore));
     }
     return 0;
+  }
+
+  get totalBonus(): number {
+    return  calcTotal(this.sdtSummary.map(s => s.bonus));
+
   }
 
 }
