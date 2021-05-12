@@ -42,7 +42,7 @@ export class SdtComponent {
     const filename = `sdt_${formatDate(this.date, 'YYYYMMDD')}.csv`;
     let data = '';
     this.sdtRelatedLineInfos.map(
-      info => data += `${info.startTime.toLocaleTimeString()},${info.title},${info.duration}.${info.score}\n`
+      info => data += `${info.startTime.toLocaleTimeString()},${info.title},${info.duration},${info.score},${calcClearBonus(info.duration)}\n`
     );
     const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
     const blob = new Blob([bom, data], { type: 'text/csv' });
