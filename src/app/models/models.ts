@@ -166,7 +166,8 @@ export const SDT_MAP_INFO = [
     key: 'になるように数字カードを見つけて中央の装置に投入して下さい。',
     value: 'スロット',
     type: LineType.line,
-    score: 100
+    // score: 100
+    score: 200
   },
   {
     key: '一人が複数のレバーを引いてもカウントされます',
@@ -184,7 +185,8 @@ export const SDT_MAP_INFO = [
     key: '無造作に爆発する地点を避けて中央部にある目的地に到達してください',
     value: '迷路',
     type: LineType.line,
-    score: 100
+    // score: 100
+    score: 300
   },
   {
     key: 'マップ中央の碑石の上に乗ってください。',
