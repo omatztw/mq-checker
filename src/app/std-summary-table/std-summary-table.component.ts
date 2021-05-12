@@ -10,7 +10,7 @@ import { totalTime, calcTotal } from '../util/util';
 export class StdSummaryTableComponent implements OnInit {
 
   @Input() sdtSummary: SdtSummary[];
-  displayedColumns = ['title', 'count', 'min', 'max', 'ave'];
+  displayedColumns = ['title', 'count', 'min', 'max', 'ave', 'score'];
 
   constructor() { }
 
@@ -20,6 +20,13 @@ export class StdSummaryTableComponent implements OnInit {
   get totalCount(): number {
     if (this.sdtSummary) {
       return calcTotal(this.sdtSummary.map(s => s.count));
+    }
+    return 0;
+  }
+
+  get totalScore(): number {
+    if (this.sdtSummary) {
+      return calcTotal(this.sdtSummary.map(s => s.subScore));
     }
     return 0;
   }

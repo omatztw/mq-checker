@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { totalTime } from '../util/util';
+import { calcTotal, totalTime } from '../util/util';
 import { LineInfo } from '../models/models';
 
 @Component({
@@ -10,7 +10,7 @@ import { LineInfo } from '../models/models';
 export class SdtTableComponent implements OnInit {
 
   @Input() sdtRelatedLineInfos: LineInfo[];
-  displayedColumns = ['startTime', 'title', 'duration'];
+  displayedColumns = ['startTime', 'title', 'duration', 'score'];
 
   constructor() { }
 
@@ -19,6 +19,10 @@ export class SdtTableComponent implements OnInit {
 
   getTotal(): number {
     return totalTime(this.sdtRelatedLineInfos);
+  }
+
+  getTotalScore(): number {
+    return calcTotal(this.sdtRelatedLineInfos.map(s => s.score));
   }
 
 }

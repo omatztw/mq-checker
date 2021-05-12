@@ -42,7 +42,7 @@ export class SdtComponent {
     const filename = `sdt_${formatDate(this.date, 'YYYYMMDD')}.csv`;
     let data = '';
     this.sdtRelatedLineInfos.map(
-      info => data += `${info.startTime.toLocaleTimeString()},${info.title},${info.duration}\n`
+      info => data += `${info.startTime.toLocaleTimeString()},${info.title},${info.duration}.${info.score}\n`
     );
     const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
     const blob = new Blob([bom, data], { type: 'text/csv' });
@@ -82,6 +82,7 @@ export class SdtComponent {
       if (summary.count) {
         summary.min = Math.min(...currentMapInfo.map(cinfo => cinfo.duration));
         summary.max = Math.max(...currentMapInfo.map(cinfo => cinfo.duration));
+        summary.subScore = currentMapInfo.reduce((p, c) => p + c.score, 0);
         summary.ave = parseFloat((totalTime(currentMapInfo) / currentMapInfo.length).toFixed(2));
       }
       return summary;
@@ -129,6 +130,9 @@ export class SdtComponent {
         const lineInfo = new LineInfo();
         lineInfo.title = match.value;
         lineInfo.type = match.type;
+        if(match.score) {
+          lineInfo.score = match.score;
+        }
         lineInfo.startTime = fetchDateFromLine(line, this.date);
         return lineInfo;
       });

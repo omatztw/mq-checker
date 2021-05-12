@@ -19,6 +19,7 @@ export class Task {
 export class LineInfo {
   title: string;
   type: LineType;
+  score: number;
   startTime: Date;
   endTime: Date;
 
@@ -36,6 +37,7 @@ export class SdtSummary {
   min: number;
   max: number;
   ave: number;
+  subScore: number;
 }
 
 export class SdtScore {
@@ -157,59 +159,81 @@ export const SDT_MAP_INFO = [
     key: 'マップの奥にいるボスモンスターを退治してください。',
     value: 'ボス',
     type: LineType.line,
+    score: 100
   },
   {
     key: 'になるように数字カードを見つけて中央の装置に投入して下さい。',
     value: 'スロット',
     type: LineType.line,
+    score: 100
   },
   {
     key: '一人が複数のレバーを引いてもカウントされます',
     value: 'レバー',
     type: LineType.line,
+    score: 100
   },
   {
     key: 'マップ中央のボタンの上に乗せてください。',
     value: '謎の破片',
     type: LineType.line,
+    score: 100
   },
   {
     key: '無造作に爆発する地点を避けて中央部にある目的地に到達してください',
     value: '迷路',
     type: LineType.line,
+    score: 100
   },
   {
     key: 'マップ中央の碑石の上に乗ってください。',
     value: '碑石',
     type: LineType.line,
+    score: 100
   },
   {
     key: '自分に付与された数字と一致する出口を見つけてください。',
     value: '4ヶ所出口',
     type: LineType.line,
+    score: 100
   },
   {
     key: '新しい脱出装置が生成されました。脱出装置は一定時間が経つと消えます。',
     value: '脱出装置',
     type: LineType.line,
+    score: 100
   },
-  { key: '変異したトゲリーナ探し', value: 'トゲリーナ', type: LineType.line },
+  { 
+    key: '変異したトゲリーナ探し', 
+    value: 'トゲリーナ', 
+    type: LineType.line,
+    score: 150
+
+  },
   {
     key: 'メンバー全員が各部屋の中央に乗ってください。',
     value: '3方向',
     type: LineType.line,
+    score: 150
   },
   {
     key: '散らばっている3匹のボスを見つけて全て退治してください。',
     value: '3ボス',
     type: LineType.line,
+    score: 250
   },
   {
     key: '見えない幽霊を避けて左下にある目的地に到達してください。',
     value: '幽霊',
     type: LineType.line,
+    score: 150
   },
-  { key: '[古代ベレシス]の攻撃から', value: 'ベレシス', type: LineType.line },
+  { 
+    key: '[古代ベレシス]の攻撃から', 
+    value: 'ベレシス', 
+    type: LineType.line,
+    score: 500
+  },
   { key: 'クラブの記録は', value: 'クリア', type: LineType.clear },
   {
     key: '全スキルの中ディレイが',
