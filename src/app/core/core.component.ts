@@ -22,7 +22,6 @@ export class CoreComponent implements OnInit {
   needMaterial: Material = {
     powder: 0,
     crystal: 0,
-    seed: 0,
   };
   start: number;
   goal: number;
@@ -130,34 +129,6 @@ export class CoreComponent implements OnInit {
     0.01, // 24. 4-4
   ];
 
-  seed = [
-    0, // 0. 0-0
-    5, // 1. 0-1
-    5.5, // 2. 0-2
-    6, // 3. 0-3
-    6.5, // 4. 0-4
-    7, // 5. 1-0
-    7.5, // 6. 1-1
-    8, // 7. 1-2
-    8.5, // 8. 1-3
-    9, // 9. 1-4
-    9.5, // 10. 2-0
-    10, // 11. 2-1
-    10.5, // 12. 2-2
-    11, // 13. 2-3
-    11.5, // 14. 2-4
-    15, // 15. 3-0
-    15.5, // 16. 3-1
-    16, // 17. 3-2
-    16.5, // 18. 3-3
-    17, // 19. 3-4
-    17.5, // 20. 4-0
-    18, // 21. 4-1
-    18.5, // 22. 4-2
-    19, // 23. 4-3
-    19.5, // 24. 4-4
-  ];
-
   powder = [
     0,
     10,
@@ -221,7 +192,6 @@ export class CoreComponent implements OnInit {
     this.needMaterial = {
       powder: 0,
       crystal: 0,
-      seed: 0
     };
     setTimeout(() => {
       const n = 1000000;
@@ -232,21 +202,16 @@ export class CoreComponent implements OnInit {
       }
       const stepSumPowder = stepResult.map((d) => d.powder);
       const stepSumCrystal = stepResult.map((d) => d.crystal);
-      const stepSumSeed = stepResult.map((d) => d.seed);
       const powderAve = this.average(stepSumPowder);
       const powderSigma = this.sigma(stepSumPowder);
 
       const crystalAve = this.average(stepSumCrystal);
       const crystalSigma = this.sigma(stepSumCrystal);
 
-      const seedAve = this.average(stepSumSeed);
-      const seedSigma = this.sigma(stepSumSeed);
-
       this.calculating = false;
       this.needMaterial = {
         powder: powderAve + this.targetZ * powderSigma,
         crystal: crystalAve + this.targetZ * crystalSigma,
-        seed: seedAve + this.targetZ * seedSigma,
       };
     }, 100);
   }
@@ -254,20 +219,17 @@ export class CoreComponent implements OnInit {
   execute(start: number, goal: number, numCore: number): Material {
     let powderSum = 0;
     let crystalSum = 0;
-    let seedSum = 0;
     for (let coreIndex = 0; coreIndex < numCore; coreIndex++) {
       for (let step = start; step < goal; step++) {
         do {
           powderSum += this.powder[step + 1];
           crystalSum += this.crystal[step + 1];
-          seedSum += this.seed[step + 1];
         } while (Math.random() >= this.probability[step + 1]);
       }
     }
     return {
       powder: powderSum,
       crystal: crystalSum,
-      seed: seedSum
     };
   }
 
@@ -291,5 +253,4 @@ export class CoreComponent implements OnInit {
 export interface Material {
   powder: number;
   crystal: number;
-  seed: number;
 }

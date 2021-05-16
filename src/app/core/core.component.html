@@ -47,9 +47,8 @@
     </mat-form-field>
   </div>
   <div *ngIf="!calculating; else elseBlock" class="container-box">
-    <p>必要粉: {{ math.ceil(needMaterial.powder).toLocaleString() }}</p>
-    <p>必要結晶: {{ math.ceil(needMaterial.crystal).toLocaleString() }}</p>
-    <p>必要SEED: {{ math.ceil(needMaterial.seed).toLocaleString() }} M</p>
+    <p>必要粉: {{ math.ceil(needMaterial.powder) }}</p>
+    <p>必要結晶: {{ math.ceil(needMaterial.crystal) }}</p>
   </div>
   <ng-template #elseBlock> </ng-template>
 </mat-card>
