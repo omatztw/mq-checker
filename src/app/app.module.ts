@@ -54,6 +54,7 @@ import { LoginHistoryComponent } from './login-history/login-history.component';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { TaskComponent } from './task/task.component';
 import { FooterComponent } from './footer/footer.component';
+import { CalcexpComponent } from './calcexp/calcexp.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { FooterComponent } from './footer/footer.component';
     LogViewerComponent,
     TaskComponent,
     FooterComponent,
+    CalcexpComponent,
   ],
   imports: [
     BrowserModule,

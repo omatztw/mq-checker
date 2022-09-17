@@ -5,3 +5,8 @@ export class Line {
   message: string;
   currentChar: string;
 }
+
+export class ExpLine {
+  time: Date;
+  exp: number;
+}

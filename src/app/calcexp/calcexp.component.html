@@ -1,0 +1,42 @@
+<mat-card class="card">
+  <ng-container *ngIf="supported; else unsupported">
+    <div class="header-container">
+      <button
+        mat-raised-button
+        class="file-select-button"
+        color="primary"
+        [disabled]="timer"
+        (click)="onClick($event)"
+      >
+        {{
+          timer
+            ? "ログ取得中です..."
+            : "TalesWeaverのフォルダを選択 (例：C:\\Nexon\\TalesWeaver)"
+        }}
+      </button>
+      <div *ngIf="calclating">計算中</div>
+    </div>
+    <div class="tool-bar">
+      <button
+        mat-raised-button
+        class="btn-small"
+        color="warn"
+        (click)="clearTime()"
+      >
+        時間をリセット
+      </button>
+    </div>
+
+    <div class="result">
+      <div *ngIf="startTime && currentTime">
+        測定期間: {{ startTime && startTime.toLocaleString() }} ~
+        {{ currentTime && currentTime.toLocaleString() }}
+      </div>
+      <div>測定時間: {{ durationStr }}</div>
+      <div>時給: {{ expRate.toLocaleString() }} 経験値/秒</div>
+    </div>
+  </ng-container>
+</mat-card>
+<ng-template #unsupported>
+  <div>このブラウザは対応していません(´・ω・`)(´・ω・`)</div>
+</ng-template>
