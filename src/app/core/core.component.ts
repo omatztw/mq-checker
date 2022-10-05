@@ -29,6 +29,7 @@ export class CoreComponent implements OnInit {
   numCore = 3;
   calculating = false;
   targetZ = 0.84;
+  coreType = 1;
 
   probabilityList = [
     { probability: '50%', z: 0 },
@@ -39,6 +40,11 @@ export class CoreComponent implements OnInit {
   ];
 
   numCoreList = [1, 2, 3, 4, 5, 6];
+
+  coreTypeList = [
+    { name: '通常', value: 1 },
+    { name: '半額', value: 2 },
+  ];
 
   phaseList = [
     {
@@ -159,59 +165,12 @@ export class CoreComponent implements OnInit {
   ];
 
   powder = [
-    0,
-    10,
-    20,
-    30,
-    40,
-    50,
-    60,
-    70,
-    80,
-    90,
-    100,
-    110,
-    120,
-    130,
-    140,
-    200,
-    210,
-    220,
-    230,
-    240,
-    250,
-    260,
-    270,
-    290,
-    290,
+    0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 200, 210,
+    220, 230, 240, 250, 260, 270, 290, 290,
   ];
 
   crystal = [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
   ];
 
   ngOnInit(): void {}
@@ -221,7 +180,7 @@ export class CoreComponent implements OnInit {
     this.needMaterial = {
       powder: 0,
       crystal: 0,
-      seed: 0
+      seed: 0,
     };
     setTimeout(() => {
       const n = 1000000;
@@ -258,16 +217,16 @@ export class CoreComponent implements OnInit {
     for (let coreIndex = 0; coreIndex < numCore; coreIndex++) {
       for (let step = start; step < goal; step++) {
         do {
-          powderSum += this.powder[step + 1];
+          powderSum += this.powder[step + 1] / this.coreType;
           crystalSum += this.crystal[step + 1];
-          seedSum += this.seed[step + 1];
+          seedSum += this.seed[step + 1] / this.coreType;
         } while (Math.random() >= this.probability[step + 1]);
       }
     }
     return {
       powder: powderSum,
       crystal: crystalSum,
-      seed: seedSum
+      seed: seedSum,
     };
   }
 

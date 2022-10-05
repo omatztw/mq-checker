@@ -30,6 +30,14 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>コアタイプ</mat-label>
+      <mat-select [(ngModel)]="coreType">
+        <mat-option *ngFor="let v of coreTypeList" [value]="v.value">{{
+          v.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>強化コア数</mat-label>
       <mat-select [(ngModel)]="numCore">
         <mat-option *ngFor="let v of numCoreList" [value]="v">{{
