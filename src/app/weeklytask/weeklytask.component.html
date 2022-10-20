@@ -1,0 +1,38 @@
+<mat-card class="card">
+  <ng-container *ngIf="supported; else unsupported">
+    <div class="header-container">
+      <button
+        mat-raised-button
+        class="file-select-button"
+        color="primary"
+        [disabled]="timer"
+        (click)="onClick($event)"
+      >
+        {{
+          timer
+            ? "ログ取得中です..."
+            : "TalesWeaverのフォルダを選択 (例：C:\\Nexon\\TalesWeaver)"
+        }}
+      </button>
+      <div *ngIf="calclating">計算中</div>
+    </div>
+
+    <div class="result">
+      <div>
+        <div>コンテンツ</div>
+        <div *ngFor="let header of headerInfo">{{ header }}</div>
+      </div>
+      <div class="weekly-item" *ngFor="let task of taskDisplay">
+        <ng-container *ngIf="task.date">
+          <div>{{ task.date.toLocaleDateString() }}</div>
+          <div *ngFor="let t of task.tasks">
+            {{ t.details.length }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</mat-card>
+<ng-template #unsupported>
+  <div>このブラウザは対応していません(´・ω・`)(´・ω・`)</div>
+</ng-template>

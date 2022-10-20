@@ -7,6 +7,7 @@ import { LoginHistoryComponent } from './login-history/login-history.component';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { TaskComponent } from './task/task.component';
 import { CalcexpComponent } from './calcexp/calcexp.component';
+import { WeeklytaskComponent } from './weeklytask/weeklytask.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'meiq', pathMatch: 'full' },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginHistoryComponent },
   { path: 'log', component: LogViewerComponent },
   { path: 'task', component: TaskComponent },
+  { path: 'weeklytask', component: WeeklytaskComponent },
   { path: 'exp', component: CalcexpComponent },
 ];
 

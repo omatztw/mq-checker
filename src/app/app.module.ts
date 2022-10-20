@@ -55,6 +55,7 @@ import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { TaskComponent } from './task/task.component';
 import { FooterComponent } from './footer/footer.component';
 import { CalcexpComponent } from './calcexp/calcexp.component';
+import { WeeklytaskComponent } from './weeklytask/weeklytask.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { CalcexpComponent } from './calcexp/calcexp.component';
     TaskComponent,
     FooterComponent,
     CalcexpComponent,
+    WeeklytaskComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,11 +3,16 @@
   <a [routerLink]="['meiq']" mat-button routerLinkActive="selected">迷宮</a>
   <a [routerLink]="['sdt']" mat-button routerLinkActive="selected">争奪戦</a>
   <a [routerLink]="['task']" mat-button routerLinkActive="selected">日課</a>
+  <a [routerLink]="['weeklytask']" mat-button routerLinkActive="selected"
+    >週間課題(クラウン)</a
+  >
   <a [routerLink]="['core']" mat-button routerLinkActive="selected"
-  >テシスコア計算</a
+    >テシスコア計算</a
   >
   <a [routerLink]="['exp']" mat-button routerLinkActive="selected">時給測定</a>
-  <a [routerLink]="['log']" mat-button routerLinkActive="selected">ログビューア(Beta)</a>
+  <a [routerLink]="['log']" mat-button routerLinkActive="selected"
+    >ログビューア(Beta)</a
+  >
 </mat-toolbar>
 <div class="component">
   <router-outlet></router-outlet>

@@ -3,10 +3,10 @@ import { Line } from '../models/line';
 import { ChatType, LineInfo } from '../models/models';
 
 export const toMinutes = (second: number): string => {
-    const minutes = Math.floor(second / 60);
-    const seconds = second % 60;
-    return `${('00' + minutes).slice(-2)}:${('00' + seconds).slice(-2)}`;
-  };
+  const minutes = Math.floor(second / 60);
+  const seconds = second % 60;
+  return `${('00' + minutes).slice(-2)}:${('00' + seconds).slice(-2)}`;
+};
 
 export const totalTime = (infos: LineInfo[]): number => {
   if (infos) {
@@ -27,23 +27,19 @@ export const calcTotal = (numbers: number[]): number => {
 };
 
 export const calcClearBonus = (duration: number): number => {
-  if(duration <= 10 ) {
+  if (duration <= 10) {
     return 5;
-  } 
-  else if(duration <= 20) {
+  } else if (duration <= 20) {
     return 4;
-  }
-  else if(duration <= 30) {
+  } else if (duration <= 30) {
     return 3;
-  }
-  else if(duration <= 40) {
+  } else if (duration <= 40) {
     return 2;
-  }
-  else if(duration <= 60) {
+  } else if (duration <= 60) {
     return 1;
   }
   return 0;
-}
+};
 
 export const getLogDate = (file: File): Date => {
   if (file) {
@@ -94,15 +90,20 @@ export const splitLines = (str: string): string[] => {
   return str.split(/\r\n|\n|\r/);
 };
 
-export const parseChar = (fileName: string, fileLastModified: number): Charactor  => {
+export const parseChar = (
+  fileName: string,
+  fileLastModified: number
+): Charactor => {
   const regex = fileName.match(/(.+)_(.+).profile/);
   const server = regex[1];
   const name = regex[2];
   const time = new Date(fileLastModified);
   return {
-    server, name, time
+    server,
+    name,
+    time,
   };
- };
+};
 
 export const isNativeFileSystemSupported = (): boolean => {
   return 'showDirectoryPicker' in window;
@@ -112,13 +113,16 @@ export const isSpeechSupported = (): boolean => {
   return 'speechSynthesis' in window;
 };
 
-export const parseLine = (line: string): Line => {
+export const parseLine = (line: string, date?: Date): Line => {
+  const d = date ? date : new Date();
   const lineInfo = new Line();
-  const match = line.match(/(\[ *\d+時 *\d+分 *\d+秒 *\]).+color="(#[0-9a-f]+)">(.+)<\/font>/);
+  const match = line.match(
+    /(\[ *\d+時 *\d+分 *\d+秒 *\]).+color="(#[0-9a-f]+)">(.+)<\/font>/
+  );
   if (match) {
     const content = match[3];
     lineInfo.message = content;
-    lineInfo.time = fetchDateFromLine(match[1], new Date());
+    lineInfo.time = fetchDateFromLine(match[1], d);
     lineInfo.color = match[2];
     return lineInfo;
   }
