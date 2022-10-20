@@ -152,6 +152,37 @@ export class WeeklytaskComponent implements OnInit {
               message: l.message,
             };
           });
+        if (task.imperialWord) {
+          const imperialTimes = parsedLines
+            .filter((l) => {
+              const regexp = new RegExp('ｲﾝﾍﾟﾘｱﾙｸﾗｳﾝｼｰｽﾞﾝﾁｹｯﾄを使用しました。');
+              return regexp.test(l.message);
+            })
+            .map((l) => l.time);
+          const imperialTimeWords = imperialTimes.map((t) => {
+            return parsedLines.filter((l) => l.time === t);
+          });
+          const detail = imperialTimeWords
+            .filter((ls) => {
+              return ls.some((l) => {
+                const regexp = new RegExp(task.imperialWord);
+                return regexp.test(l.message);
+              });
+            })
+            .filter((ls) => {
+              return ls.some((l) => {
+                const regexp = new RegExp(task.imperialExclude);
+                return !regexp.test(l.message);
+              });
+            })
+            .map((ls) => {
+              return {
+                time: ls[0].time,
+                message: ls[0].message,
+              };
+            });
+          task.details.push(...detail);
+        }
       });
   }
 
@@ -165,7 +196,9 @@ export class WeeklytaskComponent implements OnInit {
       new Task('忘却の地下墓所', '\\[地下墓所の勲章\\] を 3個獲得しました'),
       new Task(
         'マーキュリアル洞窟',
-        '本日 \\[(セレアナ|セリオン|シルバン|シライロン)\\] ボスの討伐に成功しました。\\(討伐報酬はボスごとに1日1回獲得可能\\)'
+        '本日 \\[(セレアナ|セリオン|シルバン|シライロン)\\] ボスの討伐に成功しました。\\(討伐報酬はボスごとに1日1回獲得可能\\)',
+        '\\[ビスムト\\] を 1個獲得しました。',
+        '本日 \\[ルミナス\\] ボスの討伐に成功しました'
       ),
       new Task(
         'ルミナス',

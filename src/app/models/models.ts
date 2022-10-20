@@ -3,15 +3,24 @@ export class Task {
   content: string;
   details: { time: Date; message: string }[];
   showDetail: boolean;
+  imperialWord: string;
+  imperialExclude: string;
   get count(): number {
     return this.details.length;
   }
 
-  constructor(title?: string, content?: string) {
+  constructor(
+    title?: string,
+    content?: string,
+    imperialWord?: string,
+    imperialExclude?: string
+  ) {
     this.title = title || '';
     this.content = content || '';
     this.showDetail = false;
     this.details = [];
+    this.imperialWord = imperialWord;
+    this.imperialExclude = imperialExclude;
   }
 }
 
