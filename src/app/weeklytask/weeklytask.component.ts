@@ -178,7 +178,7 @@ export class WeeklytaskComponent implements OnInit {
       ),
       new Task(
         'アビス・深層(ヘル)',
-        '今週のアビス深層ボス戦報酬を\\d回獲得しました。'
+        '\\[アークロン勲章\\] を 15個獲得しました'
       ),
       new Task(
         '地下要塞の次元の隙間',
