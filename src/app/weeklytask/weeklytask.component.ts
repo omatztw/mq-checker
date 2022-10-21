@@ -160,7 +160,7 @@ export class WeeklytaskComponent implements OnInit {
             })
             .map((l) => l.time);
           const imperialTimeWords = imperialTimes.map((t) => {
-            return parsedLines.filter((l) => l.time === t);
+            return parsedLines.filter((l) => l.time.getTime() === t.getTime());
           });
           const detail = imperialTimeWords
             .filter((ls) => {
@@ -170,7 +170,7 @@ export class WeeklytaskComponent implements OnInit {
               });
             })
             .filter((ls) => {
-              return ls.some((l) => {
+              return ls.every((l) => {
                 const regexp = new RegExp(task.imperialExclude);
                 return !regexp.test(l.message);
               });
