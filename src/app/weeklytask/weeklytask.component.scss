@@ -3,6 +3,11 @@
     margin: 0 auto;
 }
 
+.help {
+    max-width: 800px;
+    margin: 50px auto;
+}
+
 .tool-bar {
     margin: 10px 0;
 }
@@ -11,4 +16,9 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }

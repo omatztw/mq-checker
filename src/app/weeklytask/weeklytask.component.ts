@@ -63,6 +63,9 @@ export class WeeklytaskComponent implements OnInit {
             continue;
           }
           let day = now.getDay() === 0 ? 7 : now.getDay();
+          if (day === 1 && this.weekTasks[7].date) {
+            this.reset();
+          }
           for (let i = 1; i <= day; i++) {
             const currentDay = new Date(today.getTime());
             currentDay.setDate(today.getDate() - (day - i));
@@ -133,6 +136,18 @@ export class WeeklytaskComponent implements OnInit {
         }
       }
     }, 3000);
+  }
+
+  reset() {
+    this.weekTasks = {
+      1: new WeekTask(this.generateCrownTask()),
+      2: new WeekTask(this.generateCrownTask()),
+      3: new WeekTask(this.generateCrownTask()),
+      4: new WeekTask(this.generateCrownTask()),
+      5: new WeekTask(this.generateCrownTask()),
+      6: new WeekTask(this.generateCrownTask()),
+      7: new WeekTask(this.generateCrownTask()),
+    };
   }
 
   loadTask(text: string, day: number, date: Date) {
