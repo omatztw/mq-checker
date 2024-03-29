@@ -17,23 +17,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: All things angular
-        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.4.0
-        with:
-          node-version: ${{ matrix.node-version }}
-          github_access_token: ${{ secrets.GITHUB_TOKEN }} # see the Configuration section for how you can create secrets
-          base_href: /mq-checker/ # make sure this corresponds to https://<your_username>.github.io/<base_href>/
-          deploy_branch: gh-pages # The branch the action should deploy to.
-          angular_dist_build_folder: dist/MqCount # The folder where your project is supposed to be after running ng build by the action.
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    # - run: npm install
-    # - run: npx ng build --prod --base-href "https://omatztw.github.io/mq-checker/"
-    # - run: npx ngh --dir dist/MqCount --repo=https://${{ secrets.GH_TOKEN }}@github.com/omatztw/mq-checker.git --name="おまつ先生" --email=33661309+omatztw@users.noreply.github.com
-    #   env:
-    #     CI: true
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npx ng build --prod --base-href "https://omatztw.github.io/mq-checker/"
+    - run: npx ngh --dir dist/MqCount --repo=https://${{ secrets.GH_TOKEN }}@github.com/omatztw/mq-checker.git --name="おまつ先生" --email=33661309+omatztw@users.noreply.github.com
+      env:
+        CI: true
 
-permissions:
-  contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
+
