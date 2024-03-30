@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'MqCount';
-  version = '2.0';
+  version = '2.1';
 }

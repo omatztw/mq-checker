@@ -161,6 +161,20 @@ export class WeeklytaskComponent implements OnInit {
             const regexp = new RegExp(task.content);
             return regexp.test(l.message);
           })
+          .filter((l) => {
+            if (task.otherWords && task.otherWords.length !== 0) {
+              return task.otherWords.every((ow) => {
+                return parsedLines
+                  .filter((pl) => pl.time.getTime() == l.time.getTime())
+                  .some((pl) => {
+                    const regexp = new RegExp(ow);
+                    return regexp.test(pl.message);
+                  });
+              });
+            } else {
+              return true;
+            }
+          })
           .map((l) => {
             return {
               time: l.time,
@@ -226,7 +240,10 @@ export class WeeklytaskComponent implements OnInit {
       ),
       new Task(
         'アビス・深層(ヘル)',
-        '\\[アークロン勲章\\] を 30個獲得しました'
+        '\\[アークロン勲章\\] を 30個獲得しました',
+        undefined,
+        undefined,
+        ['今週のアビス深層ボス戦報酬を\\d回獲得しました']
       ),
       new Task(
         '地下要塞の次元の隙間',

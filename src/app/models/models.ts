@@ -5,6 +5,7 @@ export class Task {
   showDetail: boolean;
   imperialWord: string;
   imperialExclude: string;
+  otherWords: string[];
   get count(): number {
     return this.details.length;
   }
@@ -13,7 +14,8 @@ export class Task {
     title?: string,
     content?: string,
     imperialWord?: string,
-    imperialExclude?: string
+    imperialExclude?: string,
+    otherWords?: string[]
   ) {
     this.title = title || '';
     this.content = content || '';
@@ -21,6 +23,7 @@ export class Task {
     this.details = [];
     this.imperialWord = imperialWord;
     this.imperialExclude = imperialExclude;
+    this.otherWords = otherWords;
   }
 }
 
@@ -81,7 +84,7 @@ export const ChatType = {
   Shout: '#c896c8',
 } as const;
 
-export type ChatType = typeof ChatType[keyof typeof ChatType];
+export type ChatType = (typeof ChatType)[keyof typeof ChatType];
 
 export const MAP_INFO = [
   {
